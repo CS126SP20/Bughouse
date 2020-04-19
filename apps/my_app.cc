@@ -51,7 +51,7 @@ void MyApp::draw() {
   int incr = 89;
   for (int i = 0; i < 8; i++) {
     int row = 0;
-    ci::gl::draw(MyApp::RetrievePieceImage(chess::Pawn, 0), ci::Rectf(i * incr + border, border + row, (i + 1) * incr + border, border + incr + row));
+    ci::gl::draw(MyApp::RetrievePieceImage(chess::PAWN, 0), ci::Rectf(i * incr + border, border + row, (i + 1) * incr + border, border + incr + row));
     row += incr;
     ci::gl::draw(nb_img_, ci::Rectf(i*incr + border, border + row, (i+1)*incr + border, border + incr + row));
     row += incr;
@@ -87,21 +87,21 @@ void MyApp::draw() {
 cinder::gl::Texture2dRef& MyApp::RetrievePieceImage(chess::PieceType piece, bool isWhite) {
   if (isWhite) {
     switch (piece) {
-      case chess::King :   return kw_img_;
-      case chess::Pawn :   return pw_img_;
-      case chess::Rook :   return rw_img_;
-      case chess::Queen :  return qw_img_;
-      case chess::Bishop : return bw_img_;
-      case chess::Knight : return nw_img_;
+      case chess::KING :   return kw_img_;
+      case chess::PAWN :   return pw_img_;
+      case chess::ROOK :   return rw_img_;
+      case chess::QUEEN :  return qw_img_;
+      case chess::BISHOP : return bw_img_;
+      case chess::KNIGHT : return nw_img_;
     }
   } else {
     switch (piece) {
-      case chess::King :   return kb_img_;
-      case chess::Pawn :   return pb_img_;
-      case chess::Rook :   return rb_img_;
-      case chess::Queen :  return qb_img_;
-      case chess::Bishop : return bb_img_;
-      case chess::Knight : return nb_img_;
+      case chess::KING :   return kb_img_;
+      case chess::PAWN :   return pb_img_;
+      case chess::ROOK :   return rb_img_;
+      case chess::QUEEN :  return qb_img_;
+      case chess::BISHOP : return bb_img_;
+      case chess::KNIGHT : return nb_img_;
     }
   }
 }
