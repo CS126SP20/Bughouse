@@ -5,9 +5,6 @@
 
 namespace chess {
 
-  int kColWhite = 0;
-  int kColBlack = 1;
-  
 enum PieceType {
   Rook,
   Knight,
@@ -17,6 +14,10 @@ enum PieceType {
   King
 };  
 
+class Piece {
+  bool is_white_;
+  PieceType piece_type_;
+};
 
 
 }  // namespace chess

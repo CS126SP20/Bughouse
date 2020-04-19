@@ -17,7 +17,7 @@ class MyApp : public cinder::app::App {
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
 
-  cinder::gl::Texture2dRef MyApp::RetrievePieceImage(chess::PieceType, int color);
+  cinder::gl::Texture2dRef& MyApp::RetrievePieceImage(chess::PieceType, bool isWhite);
 
   cinder::gl::Texture2dRef board_black_img_;
   cinder::gl::Texture2dRef board_white_img_;

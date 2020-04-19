@@ -8,7 +8,7 @@
 #include <cinder/gl/gl.h>
 #include <cinder/ImageIo.h>
 #include <choreograph/Timeline.h>
-#include "chess/Piece.h"
+#include <chess/Piece.h>
 
 namespace myapp {
 
@@ -20,6 +20,7 @@ MyApp::MyApp() {
 void MyApp::setup() {
   board_black_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_black.png")));
   board_white_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_white.png")));
+  
   // Load all piece images
   bb_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/bb.png")));
   kb_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/kb.png")));
@@ -27,7 +28,6 @@ void MyApp::setup() {
   pb_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/pb.png")));
   qb_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/qb.png")));
   rb_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/rb.png")));
-  
   
   rw_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/rw.png")));
   bw_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/bw.png")));
@@ -51,7 +51,7 @@ void MyApp::draw() {
   int incr = 89;
   for (int i = 0; i < 8; i++) {
     int row = 0;
-    ci::gl::draw(pb_img_, ci::Rectf(i*incr + border, border + row, (i+1)*incr + border, border + incr + row));
+    ci::gl::draw(MyApp::RetrievePieceImage(chess::Pawn, 0), ci::Rectf(i * incr + border, border + row, (i + 1) * incr + border, border + incr + row));
     row += incr;
     ci::gl::draw(nb_img_, ci::Rectf(i*incr + border, border + row, (i+1)*incr + border, border + incr + row));
     row += incr;
@@ -84,8 +84,8 @@ void MyApp::draw() {
 
 }
 
-cinder::gl::Texture2dRef MyApp::RetrievePieceImage(chess::PieceType piece, int color) {
-  if (color == chess::kColWhite) {
+cinder::gl::Texture2dRef& MyApp::RetrievePieceImage(chess::PieceType piece, bool isWhite) {
+  if (isWhite) {
     switch (piece) {
       case chess::King :   return kw_img_;
       case chess::Pawn :   return pw_img_;
