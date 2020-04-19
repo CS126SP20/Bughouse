@@ -5,7 +5,7 @@
 
 #include <cinder/app/App.h>
 #include <cinder/gl/Texture.h>
-
+#include "chess/Piece.h"
 
 namespace myapp {
 
@@ -16,8 +16,11 @@ class MyApp : public cinder::app::App {
   void update() override;
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
-  
-  cinder::gl::Texture2dRef texture_;
+
+  cinder::gl::Texture2dRef MyApp::RetrievePieceImage(chess::PieceType, int color);
+
+  cinder::gl::Texture2dRef board_black_img_;
+  cinder::gl::Texture2dRef board_white_img_;
   cinder::gl::Texture2dRef bb_img_;
   cinder::gl::Texture2dRef bw_img_;
   cinder::gl::Texture2dRef kb_img_;
