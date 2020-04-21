@@ -15,7 +15,8 @@ class Board {
 
 public:
   Board();
-  Piece* GetPieceAtLoc(int x, int y);
+  Piece* GetPieceAtLocWhiteView(int row, int col);
+  Piece* GetPieceAtLocBlackView(int row, int col);
   void MovePiece(int start, int end);
   
 private:

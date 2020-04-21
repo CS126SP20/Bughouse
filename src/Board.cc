@@ -63,8 +63,12 @@ Board::Board() {
   
 }  
 
-Piece* Board::GetPieceAtLoc(int x, int y) {
-  return board_[x][y];
+Piece* Board::GetPieceAtLocWhiteView(int row, int col) {
+  return board_[row][col];
+}
+
+Piece* Board::GetPieceAtLocBlackView(int row, int col) {
+  return board_[kBoardSize - row - 1][kBoardSize - col - 1];
 }
 
 }

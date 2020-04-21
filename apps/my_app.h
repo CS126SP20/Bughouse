@@ -7,8 +7,13 @@
 #include <cinder/gl/Texture.h>
 #include "chess/Piece.h"
 #include "chess/Knight.h"
+#include "utility"
 
 namespace myapp {
+  const int kBorder = 43;
+  const int kBoardLen = 800;
+  const int kSquareLen = 89;
+  const ci::vec2 
 
 class MyApp : public cinder::app::App {
  public:
@@ -22,6 +27,9 @@ class MyApp : public cinder::app::App {
   bool first_click;
 
   cinder::gl::Texture2dRef& RetrievePieceImage(chess::Piece* piece);
+  void DrawBoards();
+  void DrawPieces();
+  
 
   cinder::gl::Texture2dRef board_black_img_;
   cinder::gl::Texture2dRef board_white_img_;

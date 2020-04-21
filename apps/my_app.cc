@@ -56,70 +56,45 @@ void MyApp::update() {
 }
 
 void MyApp::draw() {
+  ci::gl::clear(ci::Color(89/256, 89/256, 89/256));
   
-  if (board_black_img_) {
-    ci::gl::draw(board_black_img_, ci::Rectf(0, 0, 800, 800));
-    ci::gl::draw(board_white_img_, ci::Rectf(800, 0, 1600, 800));
-  }
+  DrawBoards();
   
   
-  int border = 43;
-  int board_size = 800;
-  int square_size = 89;
+
 
   chess::Board board;
 
   for (int row = 0; row < chess::kBoardSize; row++) {
     for (int col = 0; col < chess:: kBoardSize; col++) {
-      if (board.GetPieceAtLoc(row, col) == nullptr) {
+      if (board.GetPieceAtLocWhiteView(row, col) == nullptr) {
         continue;
       } else {
-        ci::gl::draw(MyApp::RetrievePieceImage(board.GetPieceAtLoc(row, col)),
-            ci::Rectf(col * square_size + border, row * square_size + border, 
-                     (col + 1) * square_size + border, (row+1) * square_size + border));
+        ci::gl::draw(MyApp::RetrievePieceImage(board.GetPieceAtLocWhiteView(row, col)),
+            ci::Rectf(col * kSquareLen + kBorder, row * kSquareLen + kBorder, 
+                     (col + 1) * kSquareLen + kBorder, (row+1) * kSquareLen + kBorder));
+        ci::gl::draw(MyApp::RetrievePieceImage(board.GetPieceAtLocBlackView(row, col)),
+                     ci::Rectf(col * kSquareLen + kBorder + kBoardLen, 
+                                       row * kSquareLen + kBorder,
+                                       (col + 1) * kSquareLen + kBorder + kBoardLen,
+                                       (row+1) * kSquareLen + kBorder));
       }
     }
   }
   
+}
+
+void MyApp::DrawBoards() {
+  ci::vec2 center = getWindowCenter();
+  ci::gl::draw(board_white_img_,ci::Rectf(center.x - kBoardLen, center.y - kBoardLen/2,
+                         center.x, center.y + kBoardLen/2));
+  ci::gl::draw(board_black_img_, ci::Rectf(center.x, center.y - kBoardLen/2,
+                                           center.x + kBoardLen, center.y + kBoardLen/2));
   
+}
 
-//  int incr = 89;
-//  for (int i = 0; i < 8; i++) {
-//    int row = 0;
-//    if (mLoc1.x >0) {
-//
-//      row += incr;
-//    }
-//
-//    ci::gl::draw(nb_img_, ci::Rectf(i*incr + border, border + row, (i+1)*incr + border, border + incr + row));
-//    row += incr;
-//    ci::gl::draw(rb_img_, ci::Rectf(i *incr +border, border + row, (i+1)*incr + border, border + incr + row));
-//    row += incr;
-//    ci::gl::draw(kb_img_,ci::Rectf(i * incr +border, border + row, (i+1)*incr + border, border + incr+ row));
-//    row += incr;
-//    ci::gl::draw(qb_img_, ci::Rectf(i * incr + border, border + row, (i+1)*incr + border, border + incr+ row));
-//    row += incr;
-//    ci::gl::draw(bb_img_, ci::Rectf(i * incr + border, border + row, (i+1)*incr + border, border + incr+ row));
-//  }
-//
-//
-//
-//  int eh = 843;
-//  for (int i = 0; i < 8; i++) {
-//    int row = 0;
-//    ci::gl::draw(pw_img_, ci::Rectf(i*incr + eh, border + row, (i+1)*incr + eh, border + incr + row));
-//    row += incr;
-//    ci::gl::draw(nw_img_, ci::Rectf(i*incr + eh, border + row, (i+1)*incr + eh, border + incr + row));
-//    row += incr;
-//    ci::gl::draw(rw_img_, ci::Rectf(i *incr +eh, border + row, (i+1)*incr + eh, border + incr + row));
-//    row += incr;
-//    ci::gl::draw(kw_img_,ci::Rectf(i * incr +eh, border + row, (i+1)*incr + eh, border + incr+ row));
-//    row += incr;
-//    ci::gl::draw(qw_img_, ci::Rectf(i * incr + eh, border + row, (i+1)*incr + eh, border + incr+ row));
-//    row += incr;
-//    ci::gl::draw(bw_img_, ci::Rectf(i * incr + eh, border + row, (i+1)*incr + eh, border + incr+ row));
-//  }
-
+void MyApp::DrawPieces() {
+  
 }
 
 cinder::gl::Texture2dRef& MyApp::RetrievePieceImage(chess::Piece* piece) {
