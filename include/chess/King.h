@@ -6,20 +6,21 @@
 #define FINALPROJECT_KING_H
 
 #include "King.h"
+#include "chess/Piece.h"
 
 namespace chess {
 
-  class King : public Piece {
+class King : public Piece {
     bool is_white_;
 
   public:
     explicit King(bool is_white);
 
-    bool IsLegalMove(int start_x, int start_y, int end_x, int end_y) override;
+    bool IsLegalMove(int start_x, int start_y, int end_x, int end_y);
 
-    bool GetIsWhite() override { return is_white_; }
+    bool GetIsWhite() { return is_white_; }
 
-    PieceType GetPieceType() override { return KING; }
+    PieceType GetPieceType() { return KING; }
   };
 
 }

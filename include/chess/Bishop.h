@@ -16,9 +16,9 @@ namespace chess {
 
     explicit Bishop(bool is_white);
 
-    bool IsLegalMove(int start_x, int start_y, int end_x, int end_y) override;
+    bool IsLegalMove(int start_x, int start_y, int end_x, int end_y) override ;
 
-    bool GetIsWhite() override { return is_white_; }
+    bool GetIsWhite() override { return is_white_; } 
 
     PieceType GetPieceType() override { return BISHOP; }
   };

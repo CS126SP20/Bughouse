@@ -12,9 +12,10 @@ namespace chess {
   const int kBoardSize = 8;
   
 class Board {
-  Board();
+
 public:
-  Piece* GetPieceAtLoc(int loc);
+  Board();
+  Piece* GetPieceAtLoc(int x, int y);
   void MovePiece(int start, int end);
   
 private:

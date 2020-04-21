@@ -6,6 +6,7 @@
 #include <cinder/app/App.h>
 #include <cinder/gl/Texture.h>
 #include "chess/Piece.h"
+#include "chess/Knight.h"
 
 namespace myapp {
 
@@ -20,7 +21,7 @@ class MyApp : public cinder::app::App {
   ci::vec2 mLoc2;
   bool first_click;
 
-  cinder::gl::Texture2dRef& MyApp::RetrievePieceImage(chess::PieceType, bool isWhite);
+  cinder::gl::Texture2dRef& RetrievePieceImage(chess::Piece* piece);
 
   cinder::gl::Texture2dRef board_black_img_;
   cinder::gl::Texture2dRef board_white_img_;

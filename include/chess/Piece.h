@@ -20,8 +20,8 @@ enum PieceType {
 class Piece {
  public:
   virtual bool IsLegalMove(int start_x, int start_y, int end_x, int end_y) = 0;
-  virtual bool GetIsWhite() = 0;
-  virtual PieceType GetPieceType() = 0;
+  virtual bool GetIsWhite() = 0; 
+  virtual PieceType GetPieceType() = 0; 
 };
 
 }  // namespace chess

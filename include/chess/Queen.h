@@ -9,7 +9,7 @@
 
 namespace chess {
 
-  class Queen : public Piece {
+class Queen : public Piece {
     bool is_white_;
 
   public:

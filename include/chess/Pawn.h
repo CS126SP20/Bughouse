@@ -21,7 +21,7 @@ namespace chess {
 
    bool GetIsWhite() override { return is_white_; }
    
-   PieceType GetPieceType() override;
+   PieceType GetPieceType() override { return PAWN; };
  };
  
 }
