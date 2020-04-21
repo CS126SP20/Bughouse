@@ -14,11 +14,11 @@ namespace chess {
 class Board {
   Board();
 public:
-  Piece GetPieceAtLoc(int loc);
+  Piece* GetPieceAtLoc(int loc);
   void MovePiece(int start, int end);
   
 private:
-  Piece board_[kBoardSize][kBoardSize];
+  Piece* board_[kBoardSize][kBoardSize];
 };  
 }
 

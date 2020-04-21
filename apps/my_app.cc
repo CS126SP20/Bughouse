@@ -8,16 +8,29 @@
 #include <cinder/gl/gl.h>
 #include <cinder/ImageIo.h>
 #include <choreograph/Timeline.h>
+#include <choreograph/Output.hpp>
 #include <chess/Piece.h>
+#include <cinder/Log.h>
 
 namespace myapp {
-
+using cinder::app::MouseEvent;
 using cinder::app::KeyEvent;
 
 MyApp::MyApp() {
 }
 
 void MyApp::setup() {
+//  float w = 800;
+//  float left = w * 0.08f;
+//  float right = w - left;
+//  choreograph::Timeline timeline;
+//  choreograph::Output<ci::vec3> output;
+//  timeline.appl
+//  choreograph::PhraseRef<ci::vec2> leftToRight = Ramp(ci::vec2( left, 0.0f ), ci::vec2( right, 0.0f ), 1.0f, choreograph::EaseInOutQuad() );
+//
+//
+//  
+  auto sysLogger = ci::log::makeLogger<ci::log::LoggerSystem>();
   board_black_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_black.png")));
   board_white_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_white.png")));
   
@@ -37,9 +50,15 @@ void MyApp::setup() {
   qw_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/qw.png")));
 }
 
-void MyApp::update() { }
+void MyApp::update() {
+
+}
 
 void MyApp::draw() {
+  ci::Rectf rect = ci::Rectf(100, 100, 100, 100);
+  
+  
+
   
   if (board_black_img_) {
     ci::gl::draw(board_black_img_, ci::Rectf(0, 0, 800, 800));
@@ -51,8 +70,11 @@ void MyApp::draw() {
   int incr = 89;
   for (int i = 0; i < 8; i++) {
     int row = 0;
-    ci::gl::draw(MyApp::RetrievePieceImage(chess::PAWN, 0), ci::Rectf(i * incr + border, border + row, (i + 1) * incr + border, border + incr + row));
-    row += incr;
+    if (mLoc1.x >0) {
+      ci::gl::draw(MyApp::RetrievePieceImage(chess::PAWN, 0), ci::Rectf(i * incr + border, border + row, (i + 1) * incr + border, border + incr + row));
+      row += incr;
+    }
+
     ci::gl::draw(nb_img_, ci::Rectf(i*incr + border, border + row, (i+1)*incr + border, border + incr + row));
     row += incr;
     ci::gl::draw(rb_img_, ci::Rectf(i *incr +border, border + row, (i+1)*incr + border, border + incr + row));
@@ -90,6 +112,7 @@ cinder::gl::Texture2dRef& MyApp::RetrievePieceImage(chess::PieceType piece, bool
       case chess::KING :   return kw_img_;
       case chess::PAWN :   return pw_img_;
       case chess::ROOK :   return rw_img_;
+      case chess::QUEENED_PAWN :
       case chess::QUEEN :  return qw_img_;
       case chess::BISHOP : return bw_img_;
       case chess::KNIGHT : return nw_img_;
@@ -99,6 +122,7 @@ cinder::gl::Texture2dRef& MyApp::RetrievePieceImage(chess::PieceType piece, bool
       case chess::KING :   return kb_img_;
       case chess::PAWN :   return pb_img_;
       case chess::ROOK :   return rb_img_;
+      case chess::QUEENED_PAWN :
       case chess::QUEEN :  return qb_img_;
       case chess::BISHOP : return bb_img_;
       case chess::KNIGHT : return nb_img_;
@@ -106,6 +130,16 @@ cinder::gl::Texture2dRef& MyApp::RetrievePieceImage(chess::PieceType piece, bool
   }
 }
 
-  void MyApp::keyDown(KeyEvent event) { }
+void MyApp::mouseDown(MouseEvent event) {
+  if (event.isLeft()) {
+    if (first_click) {
+      mLoc1 = event.getPos();
+      first_click = false;
+    } else {
+      mLoc2 = event.getPos();
+      first_click = true;
+    }  
+  }
+}
 
 }  // namespace myapp
