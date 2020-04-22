@@ -15,7 +15,7 @@ Engine::Engine(ci::Area left_board_bounds, ci::Area top_left_box_bounds, ci::Are
 }
 
 void Engine::Update() {
-//  left_board_.Move();
+  left_board_.Move();
 }
 
 void Engine::ProcessClick(ci::vec2 click) {

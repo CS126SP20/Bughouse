@@ -26,9 +26,7 @@ class MyApp : public cinder::app::App {
   void update() override;
   void draw() override;
   void mouseDown(cinder::app::MouseEvent) override;
-  ci::vec2 mLoc1;
-  ci::vec2 mLoc2;
-  bool first_click;
+  int count_;
   chess::Engine engine_;
 
   cinder::gl::Texture2dRef& RetrievePieceImage(chess::Piece* piece);

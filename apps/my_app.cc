@@ -51,7 +51,7 @@ void MyApp::setup() {
 //
 //
 //
-
+count_ = 0;
   board_black_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_black.png")));
   board_white_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_white.png")));
   
@@ -73,6 +73,7 @@ void MyApp::setup() {
 
 void MyApp::update() {
   engine_.Update();
+  count_++;
 }
 
 void MyApp::draw() {
@@ -112,7 +113,7 @@ void MyApp::DrawBoards() {
 }
 
 void MyApp::DrawPieces() {
-
+  
   for (int row = 0; row < chess::kBoardSize; row++) {
     for (int col = 0; col < chess:: kBoardSize; col++) {
       if (engine_.left_board_.board_.GetPieceAtLocWhiteView(row, col) == nullptr) {
@@ -120,8 +121,8 @@ void MyApp::DrawPieces() {
       } else {
         ci::gl::draw(MyApp::RetrievePieceImage(engine_.left_board_.board_.GetPieceAtLocWhiteView(row, col)),
                      GetSquareAsRectf(engine_.left_board_.bounds_.board, row, col));
-        ci::gl::draw(MyApp::RetrievePieceImage(engine_.left_board_.board_.GetPieceAtLocBlackView(row, col)),
-                     GetSquareAsRectf(engine_.right_board_.bounds_.board, row, col));
+//        ci::gl::draw(MyApp::RetrievePieceImage(engine_.left_board_.board_.GetPieceAtLocBlackView(row, col)),
+//                     GetSquareAsRectf(engine_.right_board_.bounds_.board, row, col));
       }
     }
   }
