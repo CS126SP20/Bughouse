@@ -7,6 +7,8 @@
 
 
 #include "Piece.h"
+#include "vector"
+#include <cinder/Area.h>
 
 namespace chess {
   const int kBoardSize = 8;
@@ -15,12 +17,16 @@ class Board {
 
 public:
   Board();
+  
   Piece* GetPieceAtLocWhiteView(int row, int col);
   Piece* GetPieceAtLocBlackView(int row, int col);
   void MovePiece(int start, int end);
-  
+
+  void Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn);
 private:
   Piece* board_[kBoardSize][kBoardSize];
+  void SetUpBoard();
+
 };  
 }
 

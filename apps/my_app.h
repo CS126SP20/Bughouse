@@ -8,12 +8,16 @@
 #include "chess/Piece.h"
 #include "chess/Knight.h"
 #include "utility"
+#include "chess/Board.h"
+#include "chess/Engine.h"
 
 namespace myapp {
-  const int kBorder = 43;
-  const int kBoardLen = 800;
-  const int kSquareLen = 89;
-  const ci::vec2 
+  const double kBorder = 34.4;
+  const int kBoardLen = 640;
+  const double kSquareLen = 71.2;
+  const ci::Color kGreyCol = ci::Color(1.0f * 89/256, 1.0f * 89/256, 1.0f * 89/256);
+  const ci::Color kBlackCol = ci::Color(1.0f * 62/256, 1.0f * 54/256, 1.0f * 52/256);
+  const ci::Color kWhiteCol = ci::Color(1.0f * 248 /256, 1.0f * 244/256, 1.0f * 236/256);
 
 class MyApp : public cinder::app::App {
  public:
@@ -25,11 +29,15 @@ class MyApp : public cinder::app::App {
   ci::vec2 mLoc1;
   ci::vec2 mLoc2;
   bool first_click;
+  chess::Engine engine_;
 
   cinder::gl::Texture2dRef& RetrievePieceImage(chess::Piece* piece);
+  void DrawBackground();
   void DrawBoards();
   void DrawPieces();
   
+  std::pair<int, int> GetSquareFromPoint(ci::vec2 point);
+  ci::Rectf GetSquareAsRectf(ci::Area& board_bounds, int row, int col);
 
   cinder::gl::Texture2dRef board_black_img_;
   cinder::gl::Texture2dRef board_white_img_;

@@ -9,10 +9,11 @@
 
 namespace chess {
 
-class Player {
+struct Player {
   bool can_castle;
-  bool is_player_turn;
-  std::vector<Piece> pieces_in_hand;
+  std::vector<Piece*> pieces_in_hand;
+  ci::Timer timer;
+  
 //  PlayerMove (????);
 
 };  
