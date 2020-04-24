@@ -52,8 +52,7 @@ void BoardEngine::UpdateTurn(std::pair<int, int> click) {
   } else if (IsMoveEmpty(turn_.second)) {
     if (turn_.first == click) {
       turn_.first = std::make_pair(EMPTY, EMPTY);
-    }
-    if (piece == nullptr || piece->GetIsWhite() != is_white_turn_) {
+    } else if (piece == nullptr || piece->GetIsWhite() != is_white_turn_) {
       turn_.second = click;
     }
   }
@@ -63,7 +62,7 @@ void BoardEngine::UpdateTurn(std::pair<int, int> click) {
 
 void BoardEngine::Move() {
   if (!IsMoveEmpty(turn_.first) && !IsMoveEmpty(turn_.second)) {
-    board_.Update(turn_);
+    Piece* captured = board_.Update(turn_);
     turn_ = std::make_pair(std::make_pair(-1, -1), std::make_pair(-1, -1));
     is_white_turn_ = !is_white_turn_;
     board_view_.SwapCurrentPlayerColor();

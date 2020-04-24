@@ -17,9 +17,11 @@ Board::Board() {
   SetUpBoard();
 }  
 
-void Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
+Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
+  Piece* captured = board_[turn.second.first][turn.second.second];
   board_[turn.second.first][turn.second.second] = board_[turn.first.first][turn.first.second];
   board_[turn.first.first][turn.first.second] = nullptr;
+  return captured;
 }
 
 Piece* Board::GetPieceAtLocWhiteView(int row, int col) {

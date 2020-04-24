@@ -20,9 +20,8 @@ public:
   
   Piece* GetPieceAtLocWhiteView(int row, int col);
   Piece* GetPieceAtLocBlackView(int row, int col);
-  void MovePiece(int start, int end);
 
-  void Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn);
+  Piece* Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn);
 private:
   Piece* board_[kBoardSize][kBoardSize];
   void SetUpBoard();

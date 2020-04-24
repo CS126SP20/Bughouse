@@ -12,8 +12,8 @@ namespace chess {
  class Pawn : public Piece {
    bool is_white_;
    bool can_en_pass_;
-   bool is_queen_;
-   
+   PieceType current_type_;
+   //TODO: A PAWN CAN BE ANY PIECE!
  public:
    explicit Pawn(bool is_white);
 

@@ -12,27 +12,21 @@
 #include "chess/Board.h"
 #include "chess/Engine.h"
 #include "chess/ChessImages.h"
+#include "ciAnimatedGif.h"
+
 
 namespace myapp {
 
 class MyApp : public cinder::app::App {
  public:
   MyApp();
+  ci::ciAnimatedGifRef chess_gif_;
   void setup() override;
   void update() override;
   void draw() override;
   void mouseDown(cinder::app::MouseEvent) override;
   chess::BoardEngine left_engine_;
   chess::BoardEngine right_engine_;
-
-
-  void DrawBackground();
-  void DrawBoards();
-  void DrawPieces();
-  
-  std::pair<int, int> GetSquareFromPoint(ci::vec2 point);
-  ci::Rectf GetSquareAsRectf(ci::Area& board_bounds, int row, int col);
-
 };
 
 }  // namespace myapp

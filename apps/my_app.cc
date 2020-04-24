@@ -6,14 +6,10 @@
 #include <cinder/gl/Texture.h>
 #include <cinder/gl/draw.h>
 #include <cinder/gl/gl.h>
-
-#include <choreograph/Timeline.h>
-#include <choreograph/Output.hpp>
 #include <chess/Piece.h>
-#include <cinder/Log.h>
-#include <chess/Knight.h>
 #include "chess/Board.h"
 #include "chess/Engine.h"
+#include <ciAnimatedGif.h>
 
 namespace myapp {
 using cinder::app::MouseEvent;
@@ -25,6 +21,8 @@ MyApp::MyApp() {
 }
 
 void MyApp::setup() {
+  chess_gif_ = ci::ciAnimatedGif::create( loadAsset("apple.gif") );
+  
   ci::vec2 center = getWindowCenter();
   ci::Area left_board_bounds = ci::Area(center.x - kBoardLen - kBorder, center.y - kBoardLen / 2,
                                         center.x - kBorder, center.y + kBoardLen/2);
@@ -61,6 +59,9 @@ void MyApp::draw() {
   left_engine_.Draw();
   right_engine_.Draw();
   
+  ci::vec2 center = getWindowCenter();
+  chess_gif_->draw();
+
 }
 
 

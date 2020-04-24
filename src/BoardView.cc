@@ -45,23 +45,15 @@ std::pair<int, int> BoardView::ProcessClick(ci::vec2 point) {
 }
 
 std::pair<int,int> BoardView::GetBoardSquareAtPoint(ci::vec2 point) {
-  for (int row = 0; row < kBoardSize; row++) {
-    for (int col = 0; col < kBoardSize; col++) {
-      if (point.x > bounds_.board.getX1() + kBorder + col*kSquareLen
-          && point.x <= bounds_.board.getX1() + kBorder + (col+1)*kSquareLen
-          && point.y > bounds_.board.getY1() + kBorder + row*kSquareLen
-          && point.y <= bounds_.board.getY1() + kBorder + (row+1)*kSquareLen) {
-          if (current_player_color_ == kWhiteCol) {
-            return std::make_pair(row, col);
-          } else {
-            return std::make_pair(kBoardSize - 1 - row, kBoardSize - 1 - col);
-          }
-         
-      }
-    }
-
+  int col = std::floor((point.x - bounds_.board.getX1() - kBorder) / kSquareLen);
+  int row = std::floor((point.y - bounds_.board.getY1() - kBorder) / kSquareLen);
+  if (col < 0 || row < 0) {
+    return std::make_pair(EMPTY,EMPTY);
+  } else if (current_player_color_ == kWhiteCol) {
+    return std::make_pair(row , col);
+  } else {
+    return std::make_pair(kBoardSize - 1 - row, kBoardSize - 1 - col);
   }
-  return std::make_pair(EMPTY,EMPTY);
 }
 
 void BoardView::SwapCurrentPlayerColor() {

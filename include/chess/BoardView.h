@@ -22,7 +22,7 @@ public:
 
   BoardView(ChessImages* chess_image, bool is_white, ci::Area board_bounds,
       ci::Area top_box_bounds, ci::Area bottom_box_bounds);
-  std::pair<int, int> BoardView::ProcessClick(ci::vec2 point);
+  std::pair<int, int> ProcessClick(ci::vec2 point);
   void SwapCurrentPlayerColor();  
   void Draw(Board& board);
 
