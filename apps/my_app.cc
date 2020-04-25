@@ -49,8 +49,14 @@ void MyApp::setup() {
 }
 
 void MyApp::update() {
-  left_engine_.Move();
-  right_engine_.Move();
+  Piece* left_capture = left_engine_.Move();
+  Piece* right_capture = right_engine_.Move();
+  if (left_capture != nullptr) {
+    right_engine_.ReceivePiece(left_capture);
+  }
+  if (right_capture != nullptr) {
+    left_engine_.ReceivePiece(right_capture);
+  }
 }
 
 void MyApp::draw() {

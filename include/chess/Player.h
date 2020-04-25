@@ -11,7 +11,7 @@ namespace chess {
 
 struct Player {
   bool can_castle;
-  std::vector<Piece*> pieces_in_hand;
+
   ci::Timer timer;
   
 //  PlayerMove (????);

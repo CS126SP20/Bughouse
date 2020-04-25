@@ -21,6 +21,10 @@ class King : public Piece {
     bool GetIsWhite() { return is_white_; }
 
     PieceType GetPieceType() { return KING; }
+    
+    bool IsPawn() override { return false; }
+    
+    void Reset() override { }
   };
 
 }

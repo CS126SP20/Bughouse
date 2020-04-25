@@ -7,7 +7,7 @@
 #include <cinder/gl/Texture.h>
 #include <chess/BoardEngine.h>
 #include "chess/Piece.h"
-#include "chess/Knight.h"
+#include "chess/PieceClasses/Knight.h"
 #include "utility"
 #include "chess/Board.h"
 #include "chess/Engine.h"

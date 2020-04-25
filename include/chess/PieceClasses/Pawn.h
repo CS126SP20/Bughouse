@@ -5,14 +5,13 @@
 #ifndef FINALPROJECT_PAWN_H
 #define FINALPROJECT_PAWN_H
 
-#include "Piece.h"
+#include "chess/Piece.h"
 
 namespace chess {
   
  class Pawn : public Piece {
    bool is_white_;
    bool can_en_pass_;
-   PieceType current_type_;
    //TODO: A PAWN CAN BE ANY PIECE!
  public:
    explicit Pawn(bool is_white);
@@ -22,6 +21,10 @@ namespace chess {
    bool GetIsWhite() override { return is_white_; }
    
    PieceType GetPieceType() override { return PAWN; };
+
+   bool IsPawn() override { return true; }
+
+   void Reset() override { }
  };
  
 }

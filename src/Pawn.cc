@@ -2,7 +2,7 @@
 // Created by tomok on 4/19/2020.
 //
 
-#include "chess/Pawn.h"
+#include "chess/PieceClasses/Pawn.h"
 
 namespace chess {
 Pawn::Pawn(bool is_white)

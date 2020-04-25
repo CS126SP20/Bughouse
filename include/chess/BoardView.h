@@ -33,7 +33,9 @@ private:
   void DrawBoxes();
   void DrawBoard();
   void DrawPieces(Board& board);
-  ci::Rectf GetSquareAsRectf(ci::Area& board_bounds, int row, int col);
+  void DrawHandPieces(Board& board);
+  ci::Rectf GetSquareAsRectf(int row, int col);
+  ci::Rectf GetHandIndexAsRectf(ci::Area& box_bounds, int index);
   ci::Color current_player_color_;
   ci::Color current_opponent_color_;
 };  

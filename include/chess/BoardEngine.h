@@ -38,9 +38,8 @@ public:
   void ProcessClick(ci::vec2 point);
 
   void Draw();
-  Piece* SendPiece();
-  void RecievePiece(Piece* piece);
-  void Move();
+  void ReceivePiece(Piece* piece);
+  Piece* Move();
   
   // A board object to represent the board
   Board board_;

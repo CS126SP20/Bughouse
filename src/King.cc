@@ -2,7 +2,7 @@
 // Created by tomok on 4/19/2020.
 //
 
-#include "chess/King.h"
+#include "chess/PieceClasses/King.h"
 
 namespace chess {
   King::King(bool is_white) : is_white_(is_white) {}

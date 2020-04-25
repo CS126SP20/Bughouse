@@ -6,8 +6,8 @@
 #include <cinder/Rand.h>
 
 #include <chess/Piece.h>
-#include "chess/Knight.h"
-#include "chess/Bishop.h"
+#include "chess/PieceClasses/Knight.h"
+#include "chess/PieceClasses/Bishop.h"
 #include <cinder/Color.h>
 
 TEST_CASE("Random sanity test", "[random]") {

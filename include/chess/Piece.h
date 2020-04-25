@@ -19,6 +19,8 @@ enum PieceType {
 
 class Piece {
  public:
+  virtual void Reset() = 0;
+  virtual bool IsPawn() = 0;
   virtual bool IsLegalMove(int start_x, int start_y, int end_x, int end_y) = 0;
   virtual bool GetIsWhite() = 0; 
   virtual PieceType GetPieceType() = 0; 

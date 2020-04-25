@@ -15,6 +15,10 @@ namespace chess {
 const double kBorder = 34.4;
 const int kBoardLen = 640;
 const double kSquareLen = 71.2;
+const double kHandSquareLen = 55;
+const int kBoxLenIndex = 4;
+const int kBoxHeightIndex = 5;
+const 
 const ci::Color kGreyCol = ci::Color(1.0f * 91/256, 1.0f * 89/256, 1.0f * 89/256);
 const ci::Color kBlackCol = ci::Color(1.0f * 62/256, 1.0f * 54/256, 1.0f * 52/256);
 const ci::Color kWhiteCol = ci::Color(1.0f * 248 /256, 1.0f * 244/256, 1.0f * 236/256);
