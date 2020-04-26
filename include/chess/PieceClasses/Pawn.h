@@ -16,8 +16,6 @@ namespace chess {
  public:
    explicit Pawn(bool is_white);
 
-   bool IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
-
    bool GetIsWhite() override { return is_white_; }
    
    PieceType GetPieceType() override { return PAWN; };
@@ -26,6 +24,8 @@ namespace chess {
 
    void Reset() override { }
 
+   bool Pawn::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+   
    std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
  };
  

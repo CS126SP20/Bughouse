@@ -40,6 +40,36 @@ Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool
   return captured;
 }
 
+bool Board::IsValidMove(std::pair<std::pair<int, int>, std::pair<int, int> > turn, bool is_white_turn) {
+  Piece* to_move;
+  if (turn.first.second == EMPTY) {
+    to_move = GetPieceInHand(is_white_turn, turn.first.first);
+  } else {
+    to_move = GetPieceAtLocWhiteView(turn.first.first, turn.first.second);
+  }
+  
+  bool is_valid = false;
+  if (to_move->IsLegalMove(turn)) {
+    std::vector<std::pair<int,int>> path = to_move->GetPath(turn);
+    if (IsPathOpen(path)) {
+      is_valid = true;
+    }
+  }
+  
+  return is_valid;
+}
+
+bool Board::IsPathOpen(std::vector<std::pair<int, int>> &path) {
+  bool is_open = true;
+  for (std::pair<int,int> point : path) {
+    if (GetPieceAtLocWhiteView(point.first, point.second) != nullptr) {
+      is_open = false;
+      break;
+    }
+  }
+  return is_open;
+}
+
 void Board::ReceivePiece(Piece* piece) {
   bool is_white = piece->GetIsWhite();
   piece->Reset();
@@ -78,6 +108,13 @@ int Board::GetHandSize(bool is_white) {
 }
 
 void Board::SetUpBoard() {
+  // Set everything else to nullptr
+  for (int i = 0; i < kBoardSize; i++) {
+    for (int j = 0; j < kBoardSize; j++) {
+      board_[i][j] = nullptr;
+    }
+  }
+  
   bool is_white = true;
   bool is_pawn = false;
 
@@ -86,34 +123,29 @@ void Board::SetUpBoard() {
   board_[7][0] = new Rook(is_white, is_pawn);
   board_[7][7] = new Rook(is_white, is_pawn);
 
-  board_[0][1] = new Knight(!is_white, is_pawn);
-  board_[0][6] = new Knight(!is_white, is_pawn);
-  board_[7][1] = new Knight(is_white, is_pawn);
-  board_[7][6] = new Knight(is_white, is_pawn);
+//  board_[0][1] = new Knight(!is_white, is_pawn);
+//  board_[0][6] = new Knight(!is_white, is_pawn);
+//  board_[7][1] = new Knight(is_white, is_pawn);
+//  board_[7][6] = new Knight(is_white, is_pawn);
+//
+//  board_[0][2] = new Bishop(!is_white, is_pawn);
+//  board_[0][5] = new Bishop(!is_white, is_pawn);
+//  board_[7][2] = new Bishop(is_white, is_pawn);
+//  board_[7][5] = new Bishop(is_white, is_pawn);
+//
+//  board_[0][3] = new Queen(!is_white, is_pawn);
+//  board_[7][3] = new Queen(is_white, is_pawn);
+//
+//  board_[0][4] = new King(!is_white);
+//  board_[7][4] = new King(is_white);
+//
+//
+//  // Set up the pawns on the 2nd and 7th ranks with their respective colors.
+//  for (int i = 0; i < kBoardSize; i++) {
+//    board_[1][i] = new Pawn(!is_white);
+//    board_[kBoardSize - 2][i] = new Pawn(is_white);
+//  }
 
-  board_[0][2] = new Bishop(!is_white, is_pawn);
-  board_[0][5] = new Bishop(!is_white, is_pawn);
-  board_[7][2] = new Bishop(is_white, is_pawn);
-  board_[7][5] = new Bishop(is_white, is_pawn);
 
-  board_[0][3] = new Queen(!is_white, is_pawn);
-  board_[7][3] = new Queen(is_white, is_pawn);
-
-  board_[0][4] = new King(!is_white);
-  board_[7][4] = new King(is_white);
-
-
-  // Set up the pawns on the 2nd and 7th ranks with their respective colors.
-  for (int i = 0; i < kBoardSize; i++) {
-    board_[1][i] = new Pawn(!is_white);
-    board_[kBoardSize - 2][i] = new Pawn(is_white);
-  }
-
-  // Set everything else to nullptr
-  for (int i = 2; i < kBoardSize - 2; i++) {
-    for (int j = 0; j < kBoardSize; j++) {
-      board_[i][j] = nullptr;
-    }
-  }
 }
 }
