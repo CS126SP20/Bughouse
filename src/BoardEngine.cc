@@ -57,7 +57,8 @@ void BoardEngine::UpdateTurnWithBoardClick(std::pair<int, int> click) {
     } else {
       turn_.first = click;
     }
-  } else if (IsMoveEmpty(turn_.second) && (piece == nullptr || piece->GetIsWhite() != is_white_turn_)) {
+  } else if (!IsMoveEmpty(turn_.first) && IsMoveEmpty(turn_.second) 
+            && (piece == nullptr || piece->GetIsWhite() != is_white_turn_)) {
     if (turn_.first.second == EMPTY) {
       
     } else {
