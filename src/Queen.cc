@@ -13,6 +13,7 @@ namespace chess {
     return false;
   }
 
+  // TODO: Make a rook or a bishop and return their path.
   std::vector<std::pair<int,int>> Queen::GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
     std::vector<std::pair<int,int>> path;
     return path;

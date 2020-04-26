@@ -101,7 +101,7 @@ void BoardView::DrawBoxes() {
 void BoardView::DrawBoard() {
   ci::vec2 center = ci::app::getWindowCenter();
   
-  ci::gl::draw(images_->RetrieveBoardImage(current_player_color_),
+  ci::gl::draw(images_->RetrieveBoardImage(kWhiteCol),
       ci::Rectf(bounds_.board));
 
 }
@@ -110,18 +110,19 @@ void BoardView::DrawPieces(Board& board) {
   for (int row = 0; row < chess::kBoardSize; row++) {
     for (int col = 0; col < chess:: kBoardSize; col++) {
       if (current_player_color_ == kWhiteCol) {
-        if (board.GetPieceAtLocWhiteView(row, col) == nullptr) {
+        if (board.GetPieceAtSquare(row, col) == nullptr) {
           continue;
         } else {
-          ci::gl::draw(images_->RetrievePieceImage(board.GetPieceAtLocWhiteView(row, col)),
+          ci::gl::draw(images_->RetrievePieceImage(board.GetPieceAtSquare(row, col)),
                        GetSquareAsRectf(row, col));
         }
       } else {
-        if (board.GetPieceAtLocBlackView(row, col) == nullptr) {
+        if (board.GetPieceAtSquare(kBoardSize - 1 - row, kBoardSize - 1 - col) == nullptr) {
           continue;
         } else {
 
-          ci::gl::draw(images_->RetrievePieceImage(board.GetPieceAtLocBlackView(row, col)),
+          ci::gl::draw(images_->RetrievePieceImage(
+              board.GetPieceAtSquare(kBoardSize - 1 - row, kBoardSize - 1 - col)),
                        GetSquareAsRectf(row, col));
         }
       }

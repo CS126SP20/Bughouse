@@ -24,7 +24,7 @@ bool BoardEngine::IsMoveEmpty(std::pair<int,int> move) {
 //bool BoardEngine::IsBoardClickValid(std::pair<int, int> click) {
 ////  Piece* piece;
 ////  if (is_white_turn_) {
-////    piece = board_.GetPieceAtLocWhiteView(click.first, click.second);
+////    piece = board_.GetPieceAtSquare(click.first, click.second);
 ////  } else {
 ////    piece = board_.GetPieceAtLocBlackView(click.first, click.second);
 ////  }
@@ -49,7 +49,7 @@ void BoardEngine::ProcessClick(ci::vec2 point) {
 }
 
 void BoardEngine::UpdateTurnWithBoardClick(std::pair<int, int> click) {
-  Piece* piece = board_.GetPieceAtLocWhiteView(click.first, click.second);
+  Piece* piece = board_.GetPieceAtSquare(click.first, click.second);
   
   if (piece != nullptr && (piece->GetIsWhite() == is_white_turn_)) {
     if (turn_.first == click) {

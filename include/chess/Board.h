@@ -18,8 +18,7 @@ class Board {
 public:
   Board();
   
-  Piece* GetPieceAtLocWhiteView(int row, int col);
-  Piece* GetPieceAtLocBlackView(int row, int col);
+  Piece* GetPieceAtSquare(int row, int col);
   Piece* GetPieceInHand(bool is_white, int index);
   void ReceivePiece(Piece* piece);
   int GetHandSize(bool is_white);
