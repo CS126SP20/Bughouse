@@ -143,8 +143,8 @@ void BoardView::DrawHandPieces(Board& board) {
     ci::gl::draw(images_->RetrievePieceImage(board.GetPieceInHand(!is_white, i)),
                  GetHandIndexAsRectf(bounds_.top_box, i));
   }
-  
-}
+   
+} 
 
 ci::Rectf BoardView::GetHandIndexAsRectf(ci::Area& box_bounds, int index) {
   int row = floor(index / kBoxLenIndex);

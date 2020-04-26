@@ -11,8 +11,13 @@ namespace chess {
     : is_white_(is_white),
       is_pawn_{is_pawn} {}
 
-  bool Rook::IsLegalMove(int start_x, int start_y, int end_x, int end_y) {
+  bool Rook::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
     return false;
+  }
+
+  std::vector<std::pair<int,int>> Rook::GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
+    std::vector<std::pair<int,int>> path;
+    return path;
   }
 
 }

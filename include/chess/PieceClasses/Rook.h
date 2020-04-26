@@ -11,13 +11,12 @@
 namespace chess {
 
   class Rook : public Piece {
-    bool is_white_;
-    bool is_pawn_;
+
   public:
 
     explicit Rook(bool is_white, bool is_pawn);
 
-    bool IsLegalMove(int start_x, int start_y, int end_x, int end_y) override;
+    bool IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
 
     bool GetIsWhite() override { return is_white_; }
 
@@ -26,7 +25,15 @@ namespace chess {
     bool IsPawn() override { return is_pawn_; }
 
     void Reset() override { }
+
+    std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+
+  private:
+    bool is_white_;
+    bool is_pawn_;
+
   };
+
 
 
 }

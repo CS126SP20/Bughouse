@@ -2,6 +2,7 @@
 // Created by tomok on 4/19/2020.
 //
 
+#include <chess/BoardEngine.h>
 #include "chess/PieceClasses/Pawn.h"
 #include "chess/PieceClasses/King.h"
 #include "chess/PieceClasses/Queen.h"
@@ -17,10 +18,25 @@ Board::Board() {
   SetUpBoard();
 }  
 
-Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-  Piece* captured = board_[turn.second.first][turn.second.second];
-  board_[turn.second.first][turn.second.second] = board_[turn.first.first][turn.first.second];
-  board_[turn.first.first][turn.first.second] = nullptr;
+Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool is_white_turn) {
+  Piece* captured = nullptr;
+  if (turn.first.second == EMPTY) {
+    
+    board_[turn.second.first][turn.second.second] = GetPieceInHand(is_white_turn, turn.first.first);
+    
+  } else {
+    
+    captured = board_[turn.second.first][turn.second.second];
+    if (captured != nullptr && captured->GetPieceType() != PAWN && captured->IsPawn()) {
+      Piece* to_delete = captured;
+      captured = new Pawn(captured->GetIsWhite());
+      delete to_delete;
+    }
+    board_[turn.second.first][turn.second.second] = board_[turn.first.first][turn.first.second];
+    board_[turn.first.first][turn.first.second] = nullptr;
+    
+  }
+
   return captured;
 }
 
@@ -72,13 +88,13 @@ void Board::SetUpBoard() {
 
   board_[0][1] = new Knight(!is_white, is_pawn);
   board_[0][6] = new Knight(!is_white, is_pawn);
-  board_[6][1] = new Knight(is_white, is_pawn);
-  board_[6][6] = new Knight(is_white, is_pawn);
+  board_[7][1] = new Knight(is_white, is_pawn);
+  board_[7][6] = new Knight(is_white, is_pawn);
 
   board_[0][2] = new Bishop(!is_white, is_pawn);
   board_[0][5] = new Bishop(!is_white, is_pawn);
-  board_[5][2] = new Bishop(is_white, is_pawn);
-  board_[5][5] = new Bishop(is_white, is_pawn);
+  board_[7][2] = new Bishop(is_white, is_pawn);
+  board_[7][5] = new Bishop(is_white, is_pawn);
 
   board_[0][3] = new Queen(!is_white, is_pawn);
   board_[7][3] = new Queen(is_white, is_pawn);
@@ -89,8 +105,8 @@ void Board::SetUpBoard() {
 
   // Set up the pawns on the 2nd and 7th ranks with their respective colors.
   for (int i = 0; i < kBoardSize; i++) {
-    board_[1][i] = new Pawn(false);
-    board_[kBoardSize - 2][i] = new Pawn(true);
+    board_[1][i] = new Pawn(!is_white);
+    board_[kBoardSize - 2][i] = new Pawn(is_white);
   }
 
   // Set everything else to nullptr

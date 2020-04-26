@@ -49,6 +49,8 @@ public:
   
   // Dynamically changed every time the board flips for the other player
   bool is_white_turn_;
+
+
   
 private:
   // Represents a move of a piece from one point to another.
@@ -56,8 +58,9 @@ private:
   std::pair<std::pair<int,int>,std::pair<int,int>> turn_;
 
   
-  bool IsBoardClickValid(std::pair<int,int> click);
-  void UpdateTurn(std::pair<int,int> click);
+  bool IsBoardClickValid(int index);
+  void UpdateTurnWithBoardClick(std::pair<int,int> click);
+  void UpdateTurnWithBoxClick(std::pair<int,int> click);
   bool IsMoveEmpty(std::pair<int,int> move);
   
 };

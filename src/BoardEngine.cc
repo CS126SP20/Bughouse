@@ -21,42 +21,57 @@ bool BoardEngine::IsMoveEmpty(std::pair<int,int> move) {
   return move.first == EMPTY && move.second == EMPTY;
 }
 
-bool BoardEngine::IsBoardClickValid(std::pair<int, int> click) {
-//  Piece* piece;
-//  if (is_white_turn_) {
-//    piece = board_.GetPieceAtLocWhiteView(click.first, click.second);
-//  } else {
-//    piece = board_.GetPieceAtLocBlackView(click.first, click.second);
-//  }
+//bool BoardEngine::IsBoardClickValid(std::pair<int, int> click) {
+////  Piece* piece;
+////  if (is_white_turn_) {
+////    piece = board_.GetPieceAtLocWhiteView(click.first, click.second);
+////  } else {
+////    piece = board_.GetPieceAtLocBlackView(click.first, click.second);
+////  }
+////
+////  if (piece == nullptr || piece->GetIsWhite() != is_white_turn_) {
+////    return false;
+////  }
 //
-//  if (piece == nullptr || piece->GetIsWhite() != is_white_turn_) {
-//    return false;
-//  }
-
-  return true;
-  
-}
+//  return true;
+//  
+//}
 
 void BoardEngine::ProcessClick(ci::vec2 point) {
   std::pair<int,int> click = board_view_.ProcessClick(point);
   if (!IsMoveEmpty(click)) {
-    UpdateTurn(click);
+    if (click.second == EMPTY) {
+      UpdateTurnWithBoxClick(click);
+    } else {
+      UpdateTurnWithBoardClick(click);
+    }
   }
 }
 
-void BoardEngine::UpdateTurn(std::pair<int, int> click) {
+void BoardEngine::UpdateTurnWithBoardClick(std::pair<int, int> click) {
   Piece* piece = board_.GetPieceAtLocWhiteView(click.first, click.second);
   
-  if (piece != nullptr && piece->GetIsWhite() == is_white_turn_ && IsMoveEmpty(turn_.first)) {
-    turn_.first = click;
-  } else if (IsMoveEmpty(turn_.second)) {
+  if (piece != nullptr && (piece->GetIsWhite() == is_white_turn_)) {
     if (turn_.first == click) {
       turn_.first = std::make_pair(EMPTY, EMPTY);
-    } else if (piece == nullptr || piece->GetIsWhite() != is_white_turn_) {
-      turn_.second = click;
+    } else {
+      turn_.first = click;
     }
+  } else if (IsMoveEmpty(turn_.second) && (piece == nullptr || piece->GetIsWhite() != is_white_turn_)) {
+    if (turn_.first.second == EMPTY) {
+      
+    } else {
+      
+    }
+    turn_.second = click;
   }
   
+  
+}
+
+void BoardEngine::UpdateTurnWithBoxClick(std::pair<int, int> click) {
+  if (click.first < 0 || click.first >= board_.GetHandSize(is_white_turn_)) return;
+  turn_.first = click;
 }
 
 void BoardEngine::ReceivePiece(Piece* piece) {
@@ -67,8 +82,8 @@ void BoardEngine::ReceivePiece(Piece* piece) {
 Piece* BoardEngine::Move() {
   Piece* captured = nullptr;
   if (!IsMoveEmpty(turn_.first) && !IsMoveEmpty(turn_.second)) {
-    captured = board_.Update(turn_);
-    turn_ = std::make_pair(std::make_pair(-1, -1), std::make_pair(-1, -1));
+    captured = board_.Update(turn_, is_white_turn_);
+    turn_ = std::make_pair(std::make_pair(EMPTY, EMPTY), std::make_pair(EMPTY, EMPTY));
     is_white_turn_ = !is_white_turn_;
     board_view_.SwapCurrentPlayerColor();
   }

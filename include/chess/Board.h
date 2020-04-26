@@ -23,8 +23,8 @@ public:
   Piece* GetPieceInHand(bool is_white, int index);
   void ReceivePiece(Piece* piece);
   int GetHandSize(bool is_white);
-
-  Piece* Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn);
+  Piece* Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool is_white_turn);
+  
 private:
   Piece* board_[kBoardSize][kBoardSize];
   std::vector<Piece*> black_player_hand_;

@@ -61,11 +61,10 @@ void MyApp::update() {
 
 void MyApp::draw() {
   ci::gl::clear(kGreyCol);
-  
+
   left_engine_.Draw();
   right_engine_.Draw();
-  
-  ci::vec2 center = getWindowCenter();
+
   chess_gif_->draw();
 
 }

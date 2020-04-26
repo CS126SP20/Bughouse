@@ -4,6 +4,7 @@
 
 
 #include <utility>
+#include <vector>
 
 namespace chess {
 
@@ -21,9 +22,12 @@ class Piece {
  public:
   virtual void Reset() = 0;
   virtual bool IsPawn() = 0;
-  virtual bool IsLegalMove(int start_x, int start_y, int end_x, int end_y) = 0;
+  virtual bool IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) = 0;
+  virtual std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) = 0;
   virtual bool GetIsWhite() = 0; 
-  virtual PieceType GetPieceType() = 0; 
+  virtual PieceType GetPieceType() = 0;
+ 
+  
 };
 
 }  // namespace chess
