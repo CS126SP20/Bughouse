@@ -29,6 +29,8 @@ namespace chess {
     
     std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
 
+    void DoTurn() override {}
+
   private:
     bool is_white_;
     bool is_pawn_;

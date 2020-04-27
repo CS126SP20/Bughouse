@@ -23,11 +23,13 @@ class Queen : public Piece {
 
     PieceType GetPieceType() override { return QUEEN; }
 
-  bool IsPawn() override { return is_pawn_; }
+    bool IsPawn() override { return is_pawn_; }
 
-  void Reset() override { }
+    void Reset() override { }
 
-  std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+    std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+
+    void DoTurn() override {}
   };
 
 }

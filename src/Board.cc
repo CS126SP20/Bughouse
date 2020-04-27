@@ -21,18 +21,20 @@ Board::Board() {
 Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool is_white_turn) {
   Piece* captured = nullptr;
   if (turn.first.second == EMPTY) {
-    
-    board_[turn.second.first][turn.second.second] = GetPieceInHand(is_white_turn, turn.first.first);
+    Piece* to_move = GetAndRemoveFromHand(is_white_turn, turn.first.first);
+    to_move->DoTurn();
+    board_[turn.second.first][turn.second.second] = to_move;
     
   } else {
-    
+    Piece* to_move = board_[turn.first.first][turn.first.second];
     captured = board_[turn.second.first][turn.second.second];
     if (captured != nullptr && captured->GetPieceType() != PAWN && captured->IsPawn()) {
       Piece* to_delete = captured;
       captured = new Pawn(captured->GetIsWhite());
       delete to_delete;
     }
-    board_[turn.second.first][turn.second.second] = board_[turn.first.first][turn.first.second];
+    board_[turn.second.first][turn.second.second] = to_move;
+    to_move->DoTurn();
     board_[turn.first.first][turn.first.second] = nullptr;
     
   }
@@ -95,6 +97,21 @@ Piece* Board::GetPieceInHand(bool is_white, int index) {
   }
 }
 
+Piece* Board::GetAndRemoveFromHand(bool is_white, int index) {
+  Piece* to_remove = GetPieceInHand(is_white, index);
+  if (to_remove == nullptr) {
+    return nullptr;
+  }
+  
+  if (is_white) {
+    white_player_hand_.erase(white_player_hand_.begin() + index);
+  } else {
+    black_player_hand_.erase(black_player_hand_.begin() + index);
+  }
+  return to_remove;
+  
+}
+
 int Board::GetHandSize(bool is_white) {
   if (is_white) {
     return white_player_hand_.size();
@@ -137,10 +154,10 @@ void Board::SetUpBoard() {
 
 
   // Set up the pawns on the 2nd and 7th ranks with their respective colors.
-//  for (int i = 0; i < kBoardSize; i++) {
-//    board_[1][i] = new Pawn(!is_white);
-//    board_[kBoardSize - 2][i] = new Pawn(is_white);
-//  }
+  for (int i = 0; i < kBoardSize; i++) {
+    board_[1][i] = new Pawn(!is_white);
+    board_[kBoardSize - 2][i] = new Pawn(is_white);
+  }
 
 
 }

@@ -27,6 +27,8 @@ class King : public Piece {
     void Reset() override { }
 
     std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+
+    void DoTurn() override {}
   };
 
 }

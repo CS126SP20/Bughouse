@@ -26,6 +26,7 @@ class Piece {
   virtual std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) = 0;
   virtual bool GetIsWhite() = 0; 
   virtual PieceType GetPieceType() = 0;
+  virtual void DoTurn() = 0;
  
   
 };

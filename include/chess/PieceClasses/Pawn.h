@@ -11,7 +11,8 @@ namespace chess {
   
  class Pawn : public Piece {
    bool is_white_;
-   bool can_en_pass_;
+   bool is_poss_double_move_;
+   bool can_double_move_;
    //TODO: A PAWN CAN BE ANY PIECE!
  public:
    explicit Pawn(bool is_white);
@@ -27,6 +28,8 @@ namespace chess {
    bool Pawn::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
    
    std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+
+   void DoTurn() override;
  };
  
 }
