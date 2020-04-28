@@ -1,9 +1,9 @@
 //
 // Created by tomok on 4/19/2020.
 //
-
-#include <chess/BoardEngine.h>
 #include "chess/PieceClasses/Knight.h"
+#include <chess/BoardEngine.h>
+
 
 namespace chess {
 

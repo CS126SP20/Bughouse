@@ -16,17 +16,23 @@
 
 
 namespace myapp {
+  const auto kTeam1Color = ci::Color(0, 0, 1.0f);
+  const std::string kTeam1 = "Blue Team";
+  const std::string kTeam2 = "Red Team";
+  const auto kTeam2Color = ci::Color(1.0f, 0, 0.0f);
 
 class MyApp : public cinder::app::App {
  public:
   MyApp();
   ci::ciAnimatedGifRef chess_gif_;
+  ci::ciAnimatedGifRef pac_gif_;
   void setup() override;
   void update() override;
   void draw() override;
   void mouseDown(cinder::app::MouseEvent) override;
   chess::BoardEngine left_engine_;
   chess::BoardEngine right_engine_;
+  void PrintText(const std::string &text, const ci::Color &color, const cinder::vec2 &loc, const ci::ivec2& size);
 };
 
 }  // namespace myapp

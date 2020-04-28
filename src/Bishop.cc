@@ -2,8 +2,9 @@
 // Created by tomok on 4/19/2020.
 //
 
-#include <chess/BoardEngine.h>
 #include "chess/PieceClasses/Bishop.h"
+#include <chess/BoardEngine.h>
+
 
 namespace chess {
   Bishop::Bishop(bool is_white, bool is_pawn)

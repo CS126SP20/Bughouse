@@ -1,9 +1,9 @@
 //
 // Created by tomok on 4/19/2020.
 //
-
-#include <chess/BoardEngine.h>
 #include "chess/PieceClasses/Pawn.h"
+#include <chess/BoardEngine.h>
+
 
 namespace chess {
 Pawn::Pawn(bool is_white)
@@ -23,7 +23,6 @@ bool Pawn::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
         return false;
       }
     }
-    can_double_move_ = false;
     return true;
   }
   
@@ -43,6 +42,21 @@ bool Pawn::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
       }
     }
   }
+  
+  
+  if (abs(turn.first.second - turn.second.second) == 1) {
+    if (is_white_) {
+      if (turn.first.first == turn.second.first + 1) {
+        is_valid = true;
+      }
+    } else {
+      if (turn.first.first == turn.second.first - 1) {
+        is_valid = true;
+      }
+    }
+  }
+  
+  
   return is_valid;
 }
 
@@ -51,6 +65,11 @@ std::vector<std::pair<int,int>> Pawn::GetPath(std::pair<std::pair<int,int>,std::
   
   if (turn.first.second == EMPTY) {
     path.push_back(turn.second);
+    can_double_move_ = false;
+    return path;
+  }
+  
+  if (abs(turn.first.second - turn.second.second) == 1) {
     return path;
   }
   
@@ -71,9 +90,7 @@ std::vector<std::pair<int,int>> Pawn::GetPath(std::pair<std::pair<int,int>,std::
 }
 
 void Pawn::DoTurn() {
-  if (is_poss_double_move_) {
-    can_double_move_ = false;
-    is_poss_double_move_ = false;
-  }
+  can_double_move_ = false;
+  is_poss_double_move_ = false;
 }
 }  

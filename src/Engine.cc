@@ -2,8 +2,9 @@
 // Created by tomok on 4/19/2020.
 //
 
-#include <cinder/app/AppBase.h>
 #include "chess/Engine.h"
+#include <cinder/app/AppBase.h>
+
 
 namespace chess {
 

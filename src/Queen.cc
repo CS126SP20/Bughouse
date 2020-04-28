@@ -1,10 +1,10 @@
 //
 // Created by tomok on 4/19/2020.
 //
-
+#include "chess/PieceClasses/Queen.h"
 #include <chess/PieceClasses/Rook.h>
 #include <chess/PieceClasses/Bishop.h>
-#include "chess/PieceClasses/Queen.h"
+
 
 namespace chess {
   Queen::Queen(bool is_white, bool is_pawn)

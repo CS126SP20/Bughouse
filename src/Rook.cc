@@ -1,10 +1,10 @@
 //
 // Created by tomok on 4/19/2020.
 //
-
+#include "chess/PieceClasses/Rook.h"
 #include <chess/PieceClasses/Knight.h>
 #include <chess/BoardEngine.h>
-#include "chess/PieceClasses/Rook.h"
+
 
 namespace chess {
   

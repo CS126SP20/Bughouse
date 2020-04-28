@@ -2,12 +2,13 @@
 // Created by tomok on 4/21/2020.
 //
 
-#include <chess/BoardEngine.h>
-#include <chess/ChessImages.h>
+
 #include "chess/BoardView.h"
 #include <cinder/gl/Texture.h>
 #include <cinder/gl/draw.h>
 #include <cinder/app/App.h>
+#include <chess/BoardEngine.h>
+
 
 namespace chess {
 
@@ -25,9 +26,12 @@ BoardView::BoardView(ChessImages* chess_image,
     current_opponent_color_ = kWhiteCol;
   }
   images_ = chess_image;
+  is_pawn_promotion_ = false;
 }  
 
-
+void BoardView::UpdateGameState(GameState game_state) {
+  is_pawn_promotion_ = game_state == GameState::kPawnPromotion;
+}
 
 std::pair<int, int> BoardView::ProcessClick(ci::vec2 point) {
   std::pair<int,int> click_loc = std::make_pair(EMPTY, EMPTY);
@@ -76,11 +80,14 @@ void BoardView::SwapCurrentPlayerColor() {
   }
 }
 
-void BoardView::Draw(Board& board) {
+void BoardView::Draw(Board& board, Player team1, Player team2) {
   DrawBoxes();
   DrawBoard();
   DrawPieces(board);
   DrawHandPieces(board);
+//  if (is_pawn_promotion_) {
+//    DrawPawnPromotion();
+//  }
 }
 
 void BoardView::DrawBoxes() {
@@ -146,6 +153,10 @@ void BoardView::DrawHandPieces(Board& board) {
   }
    
 } 
+
+void BoardView::DrawPawnPromotion() {
+  
+}
 
 ci::Rectf BoardView::GetHandIndexAsRectf(ci::Area& box_bounds, int index) {
   int row = floor(index / kBoxLenIndex);

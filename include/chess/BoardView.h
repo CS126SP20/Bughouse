@@ -6,6 +6,10 @@
 #define FINALPROJECT_BOARDVIEW_H
 
 #include <cinder/Area.h>
+#include "Player.h"
+#include "chess/Board.h"
+#include <chess/GameState.h>
+#include <chess/ChessImages.h>
 
 namespace chess {
  
@@ -23,10 +27,13 @@ public:
   BoardView(ChessImages* chess_image, bool is_white, ci::Area board_bounds,
       ci::Area top_box_bounds, ci::Area bottom_box_bounds);
   std::pair<int, int> ProcessClick(ci::vec2 point);
+  void UpdateGameState(GameState game_state);
   void SwapCurrentPlayerColor();  
-  void Draw(Board& board);
+  void Draw(Board& board, Player team1, Player team2);
+  PieceType GetPieceTypeFromClick();
 
 private:
+  PieceType kPromotionChoices[4] = {QUEEN, KNIGHT, ROOK, BISHOP};
   std::pair<int,int> GetBoardSquareAtPoint(ci::vec2 point);
   std::pair<int,int> GetHandIndexAtPoint(ci::vec2 point);
   ChessImages* images_;
@@ -34,10 +41,14 @@ private:
   void DrawBoard();
   void DrawPieces(Board& board);
   void DrawHandPieces(Board& board);
+  void DrawPawnPromotion();
   ci::Rectf GetSquareAsRectf(int row, int col);
   ci::Rectf GetHandIndexAsRectf(ci::Area& box_bounds, int index);
   ci::Color current_player_color_;
   ci::Color current_opponent_color_;
+  bool is_pawn_promotion_;
+
+
 };  
   
 }

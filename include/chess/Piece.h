@@ -18,6 +18,7 @@ enum PieceType {
   KING
 };  
 
+
 class Piece {
  public:
   virtual void Reset() = 0;

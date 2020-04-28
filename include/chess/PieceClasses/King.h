@@ -12,6 +12,8 @@ namespace chess {
 
 class King : public Piece {
     bool is_white_;
+    bool can_castle_;
+    bool is_poss_castle_;
 
   public:
     explicit King(bool is_white);
@@ -28,7 +30,7 @@ class King : public Piece {
 
     std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
 
-    void DoTurn() override {}
+    void DoTurn() override;
   };
 
 }

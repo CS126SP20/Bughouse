@@ -6,16 +6,16 @@
 #define FINALPROJECT_PLAYER_H
 
 #include <vector>
+#include <cinder/Timer.h>
+#include "cinder/Color.h"
 
 namespace chess {
 
 struct Player {
-  bool can_castle;
-
-  ci::Timer timer;
-  
+  ci::Timer timer_;
+  bool is_white_;
+  ci::Color team_color_;
 //  PlayerMove (????);
-
 };  
 
 }

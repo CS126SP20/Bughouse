@@ -2,6 +2,7 @@
 // Created by tomok on 4/19/2020.
 //
 
+#include "chess/Board.h"
 #include <chess/BoardEngine.h>
 #include "chess/PieceClasses/Pawn.h"
 #include "chess/PieceClasses/King.h"
@@ -9,7 +10,7 @@
 #include "chess/PieceClasses/Knight.h"
 #include "chess/PieceClasses/Bishop.h"
 #include "chess/PieceClasses/Rook.h"
-#include "chess/Board.h"
+
 
 
 namespace chess {
@@ -54,7 +55,11 @@ bool Board::IsValidMove(std::pair<std::pair<int, int>, std::pair<int, int> > tur
   if (to_move->IsLegalMove(turn)) {
     std::vector<std::pair<int,int>> path = to_move->GetPath(turn);
     if (IsPathOpen(path)) {
-      is_valid = true;
+      if (to_move->GetPieceType() == PAWN && path.size() == 0) {
+        if (board_[turn.second.first][turn.second.second] != nullptr) is_valid = true;
+      } else {
+        is_valid = true;
+      }
     }
   }
   
@@ -70,6 +75,22 @@ bool Board::IsPathOpen(std::vector<std::pair<int, int>> &path) {
     }
   }
   return is_open;
+}
+
+bool Board::HasPromotedPawn(bool is_white_turn) {
+  int row;
+  if (is_white_turn) {
+    row = kBoardSize - 1;
+  } else {
+    row = 0;
+  }
+  
+  for (int i = 0; i < kBoardSize; i++) {
+    if (board_[row][i] != nullptr && board_[row][i]-> GetPieceType() == PAWN) {
+      return true;
+    }
+  }
+  return false;
 }
 
 void Board::ReceivePiece(Piece* piece) {

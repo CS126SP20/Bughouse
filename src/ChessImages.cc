@@ -1,8 +1,9 @@
 //
 // Created by tomok on 4/21/2020.
 //
-#include <chess/Piece.h>
 #include "chess/ChessImages.h"
+#include <chess/Piece.h>
+
 #include "cinder/gl/gl.h"
 #include <cinder/ImageIo.h>
 #include <cinder/app/App.h>
