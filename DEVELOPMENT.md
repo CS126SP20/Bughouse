@@ -31,3 +31,4 @@
  - **4/28/20** Added to the timer and end game functionalities
    - [ ] Waiting room screen
    - [ ] Pawn promotion screen
+   - Next week: Testing!
