@@ -42,11 +42,14 @@ private:
   void DrawPieces(Board& board);
   void DrawHandPieces(Board& board);
   void DrawPawnPromotion();
+  void DrawPlayers(Player& player1, Player& player2);
   ci::Rectf GetSquareAsRectf(int row, int col);
   ci::Rectf GetHandIndexAsRectf(ci::Area& box_bounds, int index);
   ci::Color current_player_color_;
   ci::Color current_opponent_color_;
   bool is_pawn_promotion_;
+  void PrintText(const std::string &text, const ci::Color &color, const cinder::vec2 &loc, const ci::ivec2& size);
+  std::string ReportTime(int seconds);
 
 
 };  

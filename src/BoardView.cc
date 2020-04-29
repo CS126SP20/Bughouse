@@ -81,10 +81,17 @@ void BoardView::SwapCurrentPlayerColor() {
 }
 
 void BoardView::Draw(Board& board, Player team1, Player team2) {
+  ci::gl::color(1.0f,1.0f,1.0f);
   DrawBoxes();
+  ci::gl::color(1.0f, 1.0f, 1.0f);
   DrawBoard();
+  ci::gl::color(1.0f, 1.0f, 1.0f);
   DrawPieces(board);
+  ci::gl::color(1.0f, 1.0f, 1.0f);
   DrawHandPieces(board);
+  ci::gl::color(1.0f, 1.0f, 1.0f);
+  DrawPlayers(team1, team2);
+  
 //  if (is_pawn_promotion_) {
 //    DrawPawnPromotion();
 //  }
@@ -101,8 +108,6 @@ void BoardView::DrawBoxes() {
   ci::gl::color(current_player_color_);
   ci::Rectf low = ci::Rectf(bounds_.bottom_box);
   ci::gl::drawSolidRect(low);
-
-  ci::gl::color(1.0f, 1.0f, 1.0f);
   
 }
 void BoardView::DrawBoard() {
@@ -154,9 +159,53 @@ void BoardView::DrawHandPieces(Board& board) {
    
 } 
 
+void BoardView::DrawPlayers(chess::Player &player1, chess::Player &player2) {
+  bool is_white = current_player_color_ == kWhiteCol;
+  Player bottom;
+  Player top;
+  if ( is_white && player1.is_white_) {
+    bottom = player1;
+    top = player2;
+  } else {
+    bottom = player2;
+    top = player1;
+  }
+  ci::gl::color(1.0f, 1.0f, 1.0f);
+  ci::vec2 bottom_loc = {bounds_.board.getX2() - 160, bounds_.board.getY2() - kBorder/2};
+  const cinder::ivec2 size = {300, kBorder};
+  PrintText("Player Time Remaining: " + ReportTime(bottom.timer_.getSeconds() + kBorder/2),
+      kBlackCol, bottom_loc, size);
+
+  ci::gl::color(1.0f, 1.0f, 1.0f);
+  ci::vec2 bottom_team_rect = {bounds_.board.getX2() - 420, bounds_.board.getY2() - kBorder/2};
+  PrintText("Team: " + bottom.team_name_, bottom.team_color_, bottom_team_rect, size);
+
+  ci::gl::color(1.0f, 1.0f, 1.0f);
+  ci::vec2 top_loc = {bounds_.board.getX2() - 160, bounds_.board.getY1() + kBorder/2};
+  PrintText("Player Time Remaining: " + ReportTime(top.timer_.getSeconds()),
+      kBlackCol, top_loc, size);
+
+  ci::gl::color(1.0f, 1.0f, 1.0f);
+  ci::vec2 top_team_rect = {bounds_.board.getX2() - 420, bounds_.board.getY1() + kBorder/2};
+  PrintText("Team: " + top.team_name_, top.team_color_, top_team_rect, size);
+  
+}
+
+std::string BoardView::ReportTime(int seconds) {
+  int sec_remain = kMaxSeconds - seconds;
+  int min = floor(sec_remain / 60);
+  int sec = sec_remain % 60;
+  auto to_write =  std::to_string(min) + ":" + std::to_string(sec);
+  if (to_write.length() < 4) {
+    to_write += "0";
+  }
+  return to_write;
+}
+
 void BoardView::DrawPawnPromotion() {
   
 }
+
 
 ci::Rectf BoardView::GetHandIndexAsRectf(ci::Area& box_bounds, int index) {
   int row = floor(index / kBoxLenIndex);
@@ -174,6 +223,25 @@ ci::Rectf BoardView::GetSquareAsRectf(int row, int col) {
             (col+1) * kSquareLen + bounds_.board.getX1() + kBorder, 
             (row+1) * kSquareLen + bounds_.board.getY1() + kBorder);
   return square;
+}
+
+
+void BoardView::PrintText(const std::string &text, const ci::Color &color, const cinder::vec2 &loc, const ci::ivec2& size) {
+  cinder::gl::color(color);
+
+  auto box = ci::TextBox()
+                 .alignment(ci::TextBox::RIGHT)
+                 .color(color)
+                 .size(size)
+                 .font(cinder::Font("Arial", 25))
+                 .backgroundColor(ci::ColorA(0, 0, 0, 0))
+                 .text(text);
+
+  const auto box_size = box.getSize();
+  const cinder::vec2 locp = {loc.x - box_size.x / 2, loc.y - box_size.y / 2};
+  const auto surface = box.render();
+  const auto texture = cinder::gl::Texture::create(surface);
+  cinder::gl::draw(texture, locp);
 }
 
 }

@@ -15,6 +15,7 @@ struct Player {
   ci::Timer timer_;
   bool is_white_;
   ci::Color team_color_;
+  std::string team_name_;
 //  PlayerMove (????);
 };  
 

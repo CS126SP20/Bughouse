@@ -16,10 +16,10 @@
 
 
 namespace myapp {
-  const auto kTeam1Color = ci::Color(0, 0, 1.0f);
-  const std::string kTeam1 = "Blue Team";
-  const std::string kTeam2 = "Red Team";
-  const auto kTeam2Color = ci::Color(1.0f, 0, 0.0f);
+  const auto kTeam1Color = ci::Color(1.0f*210/256, 1.0f*180/256, 1.0f*222/256);
+  const std::string kTeam1 = "Purple";
+  const std::string kTeam2 = "Blue";
+  const auto kTeam2Color = ci::Color(1.0f*89/256, 1.0f*163/256, 1.0f*229/256);
 
 class MyApp : public cinder::app::App {
  public:

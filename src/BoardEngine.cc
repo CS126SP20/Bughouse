@@ -22,9 +22,9 @@ BoardEngine::BoardEngine(ChessImages* chess_image, bool is_white,
 }
 
 void BoardEngine::CheckTimeOut() {
-  if (team_2_player_.timer_.getSeconds() >= 300) {
+  if (team_2_player_.timer_.getSeconds() >= kMaxSeconds) {
     current_game_state_ = GameState::kTeam1Win;
-  } else if (team_1_player_.timer_.getSeconds() >= 300) {
+  } else if (team_1_player_.timer_.getSeconds() >= kMaxSeconds) {
     current_game_state_ = GameState::kTeam2Win;
   }
 }
@@ -101,7 +101,7 @@ void BoardEngine::SwapTurns() {
     team_2_player_.timer_.stop();
   } else {
     team_1_player_.timer_.stop();
-    team_1_player_.timer_.resume();
+    team_2_player_.timer_.resume();
   }
 }
 

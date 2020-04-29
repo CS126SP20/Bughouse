@@ -16,7 +16,7 @@
 #include "chess/Player.h"
 
 namespace chess {
-
+  const int kMaxSeconds = 300;
   const int EMPTY = -1;
   // Represents one game. Holds the board and the board view and operates upon them.
 class BoardEngine {

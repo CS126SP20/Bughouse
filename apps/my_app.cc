@@ -43,10 +43,10 @@ void MyApp::setup() {
   ChessImages* chess_images_ = new ChessImages();
   chess_images_->SetUp();
   
-  Player team1_player1{ ci::Timer(true), true, kTeam1Color};
-  Player team1_player2{ ci::Timer(false), false, kTeam1Color };
-  Player team2_player1{ ci::Timer(false), false, kTeam2Color};
-  Player team2_player2{ ci::Timer(true), true, kTeam2Color };
+  Player team1_player1{ ci::Timer(true), true, kTeam1Color, kTeam1};
+  Player team1_player2{ ci::Timer(false), false, kTeam1Color, kTeam1 };
+  Player team2_player1{ ci::Timer(false), false, kTeam2Color, kTeam2};
+  Player team2_player2{ ci::Timer(true), true, kTeam2Color, kTeam2};
   
   left_engine_ = chess::BoardEngine(chess_images_, true,
                                     left_board_bounds, top_left_box_bounds, low_left_box_bounds,
@@ -93,11 +93,13 @@ void MyApp::draw() {
     const ci::Color txt_color = ci::Color::black();
     
     PrintText("Game Over! The Winner is: " + text, txt_color, {center.x, center.y - 100}, size);
+    ci::gl::color(1.0f, 1.0f, 1.0f);
     pac_gif_->draw();
     
   } else {
     left_engine_.Draw();
     right_engine_.Draw();
+    ci::gl::color(1.0f, 1.0f, 1.0f);
     chess_gif_->draw();
   }
 
