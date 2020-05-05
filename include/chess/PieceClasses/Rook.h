@@ -10,33 +10,27 @@
 
 namespace chess {
 
-  class Rook : public Piece {
+class Rook : public Piece {
+ public:
 
-  public:
+  explicit Rook(bool is_white, bool is_pawn);
 
-    explicit Rook(bool is_white, bool is_pawn);
+  bool GetIsWhite() override { return is_white_; }
 
+  PieceType GetPieceType() override { return ROOK; }
 
-    bool GetIsWhite() override { return is_white_; }
+  bool IsPawn() override { return is_pawn_; }
 
-    PieceType GetPieceType() override { return ROOK; }
-
-    bool IsPawn() override { return is_pawn_; }
-
-    bool IsLegalMove(std::pair<Location, Location> turn) override;
+  bool IsLegalMove(std::pair<Location, Location> turn) override;
     
-    std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
 
-    void DoTurn() override {}
+  void DoTurn() override {}
 
-  private:
-    bool is_white_;
-    bool is_pawn_;
-
-
-  };
-
-
+ private:
+  bool is_white_;
+  bool is_pawn_;
+};
 
 }
 
