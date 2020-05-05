@@ -15,22 +15,30 @@
 
 
 namespace myapp {
-  const auto kTeam1Color = ci::Color(1.0f*210/256, 1.0f*180/256, 1.0f*222/256);
-  const std::string kTeam1 = "Purple";
-  const std::string kTeam2 = "Blue";
-  const auto kTeam2Color = ci::Color(1.0f*89/256, 1.0f*163/256, 1.0f*229/256);
+  
+// Team settings  
+const auto kTeam1Color = ci::Color(1.0f*210/256, 1.0f*180/256, 1.0f*222/256);
+const std::string kTeam1Name = "Purple";
+const auto kTeam2Color = ci::Color(1.0f*89/256, 1.0f*163/256, 1.0f*229/256);
+const std::string kTeam2Name = "Blue";
 
 class MyApp : public cinder::app::App {
  public:
-  MyApp();
+  MyApp() { }
+  
+  // Game screen gif
   ci::ciAnimatedGifRef chess_gif_;
+  // End screen gif
   ci::ciAnimatedGifRef pac_gif_;
+
+  // One engine per board
+  chess::BoardEngine left_engine_;
+  chess::BoardEngine right_engine_;
+  
   void setup() override;
   void update() override;
   void draw() override;
   void mouseDown(cinder::app::MouseEvent) override;
-  chess::BoardEngine left_engine_;
-  chess::BoardEngine right_engine_;
   void PrintText(const std::string &text, const ci::Color &color, const cinder::vec2 &loc, const ci::ivec2& size);
 };
 
