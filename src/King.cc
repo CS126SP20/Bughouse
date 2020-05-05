@@ -47,6 +47,8 @@ namespace chess {
 
     if (turn.first.first == turn.second.first && turn.first.first == valid_row && turn.first.second == 4) {
       if (turn.second.second == 2) {
+        auto point_after_rook = std::make_pair(valid_row, turn.second.second - 1);
+        path.push_back(point_after_rook);
         for (int i = turn.second.second; i < turn.first.second; i++) {
           auto point = std::make_pair(valid_row, i);
           path.push_back(point);
