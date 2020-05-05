@@ -9,27 +9,28 @@
 
 namespace chess {
   
- class Knight : public Piece {
-   
-   bool is_white_;
-
-   bool is_pawn_;
+class Knight : public Piece {
    
  public:
-   explicit Knight(bool is_white, bool is_pawn);
+  explicit Knight(bool is_white, bool is_pawn);
 
-   bool IsLegalMove(std::pair<Location, Location> turn) override;
+  bool IsLegalMove(std::pair<Location, Location> turn) override;
 
-   bool GetIsWhite() override { return is_white_; }
+  bool GetIsWhite() override { return is_white_; }
 
-   PieceType GetPieceType() override { return KNIGHT; }
+  PieceType GetPieceType() override { return KNIGHT; }
 
-   bool IsPawn() override { return is_pawn_; }
+  bool IsPawn() override { return is_pawn_; }
 
-   std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
 
-   void DoTurn() override {}
- };
+  void DoTurn() override {}
+  
+ private:
+  bool is_white_;
+  bool is_pawn_;
+  
+};
  
 }
 #endif //FINALPROJECT_KNIGHT_H
