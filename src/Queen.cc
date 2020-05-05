@@ -7,25 +7,30 @@
 
 
 namespace chess {
-  Queen::Queen(bool is_white, bool is_pawn)
-    : is_white_(is_white),
-      is_pawn_{is_pawn} {}
+Queen::Queen(bool is_white, bool is_pawn)
+  : is_white_(is_white),
+    is_pawn_{is_pawn} {}
 
-  bool Queen::IsLegalMove(std::pair<Location, Location> turn) {
-    Rook rook(is_white_, false);
-    Bishop bishop(is_white_, false);
-    return rook.IsLegalMove(turn) || bishop.IsLegalMove(turn);
+    
+bool Queen::IsLegalMove(std::pair<Location, Location> turn) {
+  // A queen is just a rook-bishop
+  Rook rook(is_white_, false);
+  Bishop bishop(is_white_, false);
+  
+  return rook.IsLegalMove(turn) || bishop.IsLegalMove(turn);
+}
+
+
+std::vector<Location> Queen::GetPath(std::pair<Location, Location> turn) {
+  // Again, a queen is just a rook-bishop
+  Rook rook(is_white_, false);
+  Bishop bishop(is_white_, false);
+  
+  if (rook.IsLegalMove(turn)) {
+    return rook.GetPath(turn);
+  } else {
+    return bishop.GetPath(turn);
   }
-
-
-  std::vector<Location> Queen::GetPath(std::pair<Location, Location> turn) {
-    Rook rook(is_white_, false);
-    Bishop bishop(is_white_, false);
-    if (rook.IsLegalMove(turn)) {
-      return rook.GetPath(turn);
-    } else {
-      return bishop.GetPath(turn);
-    }
-  }
+}
 
 }

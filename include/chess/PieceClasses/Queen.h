@@ -10,25 +10,28 @@
 namespace chess {
 
 class Queen : public Piece {
-    bool is_white_;
-    
-    bool is_pawn_;
-  public:
 
-    explicit Queen(bool is_white, bool is_pawn);
+ public:
 
-    bool IsLegalMove(std::pair<Location, Location> turn) override;
+  explicit Queen(bool is_white, bool is_pawn);
 
-    bool GetIsWhite() override { return is_white_; }
+  bool IsLegalMove(std::pair<Location, Location> turn) override;
 
-    PieceType GetPieceType() override { return QUEEN; }
+  bool GetIsWhite() override { return is_white_; }
 
-    bool IsPawn() override { return is_pawn_; }
+  PieceType GetPieceType() override { return QUEEN; }
 
-    std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+  bool IsPawn() override { return is_pawn_; }
 
-    void DoTurn() override {}
-  };
+  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+
+  void DoTurn() override {}
+  
+ private:
+  bool is_white_;
+  bool is_pawn_;
+  
+};
 
 }
 
