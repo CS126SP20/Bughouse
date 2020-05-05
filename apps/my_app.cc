@@ -44,7 +44,7 @@ void MyApp::setup() {
   chess_images_->SetUp();
   
   Player team1_player1{ ci::Timer(true), true, kTeam1Color, kTeam1};
-  Player team1_player2{ ci::Timer(false), false, kTeam1Color, kTeam1 };
+  Player team1_player2{ ci::Timer(false), false, kTeam1Color, kTeam1};
   Player team2_player1{ ci::Timer(false), false, kTeam2Color, kTeam2};
   Player team2_player2{ ci::Timer(true), true, kTeam2Color, kTeam2};
   
@@ -53,7 +53,7 @@ void MyApp::setup() {
                                     team1_player1, team2_player1);
   right_engine_ = chess::BoardEngine(chess_images_, true,
                                      right_board_bounds, top_right_box_bounds, low_right_box_bounds,
-                                     team1_player2, team2_player2);
+                                     team2_player2, team1_player2);
 }
 
 void MyApp::update() {

@@ -13,8 +13,7 @@ namespace chess {
 using namespace ci::app;
   
 void ChessImages::SetUp() {
-  board_black_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_black.png")));
-  board_white_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_white.png")));
+  board_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "board_white.png")));
 
   // Load all piece images
   bb_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/bb.png")));
@@ -32,9 +31,9 @@ void ChessImages::SetUp() {
   qw_img_ = ci::gl::Texture2d::create(loadImage(loadAsset( "pieces/qw.png")));
 }
   
-cinder::gl::Texture2dRef& ChessImages::RetrievePieceImage(chess::Piece* piece) {
-  if (piece->GetIsWhite()) {
-    switch (piece->GetPieceType()) {
+cinder::gl::Texture2dRef & ChessImages::RetrievePieceImage(PieceType piece_type, bool is_white) {
+  if (is_white) {
+    switch (piece_type) {
       case chess::KING :   return kw_img_;
       case chess::PAWN :   return pw_img_;
       case chess::ROOK :   return rw_img_;
@@ -44,7 +43,7 @@ cinder::gl::Texture2dRef& ChessImages::RetrievePieceImage(chess::Piece* piece) {
       case chess::KNIGHT : return nw_img_;
     }
   } else {
-    switch (piece->GetPieceType()) {
+    switch (piece_type) {
       case chess::KING :   return kb_img_;
       case chess::PAWN :   return pb_img_;
       case chess::ROOK :   return rb_img_;
@@ -53,14 +52,6 @@ cinder::gl::Texture2dRef& ChessImages::RetrievePieceImage(chess::Piece* piece) {
       case chess::BISHOP : return bb_img_;
       case chess::KNIGHT : return nb_img_;
     }
-  }
-}
-
-cinder::gl::Texture2dRef& ChessImages::RetrieveBoardImage(ci::Color player_color) {
-  if (player_color == kBlackCol) {
-    return board_black_img_;
-  } else {
-    return board_white_img_;
   }
 }
 

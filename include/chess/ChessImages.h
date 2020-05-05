@@ -11,7 +11,8 @@
 
 
 namespace chess {
-  
+
+const int kPromotionBoxBorderLen = 2;  
 const double kBorder = 34.4;
 const int kBoardLen = 640;
 const double kSquareLen = 71.2;
@@ -25,11 +26,10 @@ const auto kWhiteCol = ci::Color(1.0f * 248 /256, 1.0f * 244/256, 1.0f * 236/256
 class ChessImages {
   public:
     void SetUp();
-    cinder::gl::Texture2dRef& RetrievePieceImage(chess::Piece* piece);
-    cinder::gl::Texture2dRef& RetrieveBoardImage(ci::Color player_color);
+    cinder::gl::Texture2dRef &RetrievePieceImage(PieceType piece_type, bool is_white);
+    cinder::gl::Texture2dRef &RetrieveBoardImage() { return board_img_;};
   private:
-    cinder::gl::Texture2dRef board_black_img_;
-    cinder::gl::Texture2dRef board_white_img_;
+    cinder::gl::Texture2dRef board_img_;
     cinder::gl::Texture2dRef bb_img_;
     cinder::gl::Texture2dRef bw_img_;
     cinder::gl::Texture2dRef kb_img_;

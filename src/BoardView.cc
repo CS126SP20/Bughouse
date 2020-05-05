@@ -18,6 +18,13 @@ BoardView::BoardView(ChessImages* chess_image,
   bounds_.board = board_bounds;
   bounds_.bottom_box = bottom_box_bounds;
   bounds_.top_box = top_box_bounds;
+  ci::vec2 board_center = (bounds_.board.getUL() + kBoardLen/2);
+  auto promotion_UL = ci::vec2(board_center.x - 5*kPromotionBoxBorderLen/2 - 2*kHandSquareLen,
+                               board_center.y - kPromotionBoxBorderLen - kHandSquareLen/2);
+  auto promotion_LR = ci::vec2(board_center.x + 5*kPromotionBoxBorderLen/2 + 2*kHandSquareLen,
+                               board_center.y + kPromotionBoxBorderLen + kHandSquareLen/2);
+  bounds_.promotion_box = ci::Area(promotion_UL, promotion_LR);
+  
   if (is_white) {
     current_player_color_ = kWhiteCol;
     current_opponent_color_ = kBlackCol;
@@ -26,16 +33,11 @@ BoardView::BoardView(ChessImages* chess_image,
     current_opponent_color_ = kWhiteCol;
   }
   images_ = chess_image;
-  is_pawn_promotion_ = false;
-}  
-
-void BoardView::UpdateGameState(GameState game_state) {
-  is_pawn_promotion_ = game_state == GameState::kPawnPromotion;
 }
 
 std::pair<int, int> BoardView::ProcessClick(ci::vec2 point) {
   std::pair<int,int> click_loc = std::make_pair(EMPTY, EMPTY);
-
+  
   if (point.x > bounds_.board.getX1() + kBorder && point.x < bounds_.board.getX2() - kBorder
       && point.y > bounds_.board.getY1() + kBorder && point.y < bounds_.board.getY2() - kBorder) {
     click_loc = GetBoardSquareAtPoint(point);
@@ -47,6 +49,22 @@ std::pair<int, int> BoardView::ProcessClick(ci::vec2 point) {
   
   return click_loc;
 }
+
+PieceType BoardView::GetPieceTypeFromClick(ci::vec2 click) {
+  int index = -1;
+  if (click.x > bounds_.promotion_box.getX1() && click.x < bounds_.promotion_box.getX2()
+      && click.y > bounds_.promotion_box.getY1() && click.y < bounds_.promotion_box.getY2()) {
+    index = floor((click.x - bounds_.promotion_box.getX1()) / kHandSquareLen);
+  }
+  
+  if (index != -1) {
+    return kPromotionChoices[index];
+  }
+  
+  return PAWN;
+  
+}
+
 
 std::pair<int,int> BoardView::GetBoardSquareAtPoint(ci::vec2 point) {
   int col = std::floor((point.x - bounds_.board.getX1() - kBorder) / kSquareLen);
@@ -91,10 +109,6 @@ void BoardView::Draw(Board& board, Player team1, Player team2) {
   DrawHandPieces(board);
   ci::gl::color(1.0f, 1.0f, 1.0f);
   DrawPlayers(team1, team2);
-  
-//  if (is_pawn_promotion_) {
-//    DrawPawnPromotion();
-//  }
 }
 
 void BoardView::DrawBoxes() {
@@ -113,7 +127,7 @@ void BoardView::DrawBoxes() {
 void BoardView::DrawBoard() {
   ci::vec2 center = ci::app::getWindowCenter();
   
-  ci::gl::draw(images_->RetrieveBoardImage(kWhiteCol),
+  ci::gl::draw(images_->RetrieveBoardImage(),
       ci::Rectf(bounds_.board));
 
 }
@@ -125,16 +139,16 @@ void BoardView::DrawPieces(Board& board) {
         if (board.GetPieceAtSquare(row, col) == nullptr) {
           continue;
         } else {
-          ci::gl::draw(images_->RetrievePieceImage(board.GetPieceAtSquare(row, col)),
+          Piece* to_draw = board.GetPieceAtSquare(row, col);
+          ci::gl::draw(images_->RetrievePieceImage(to_draw->GetPieceType(), to_draw->GetIsWhite()),
                        GetSquareAsRectf(row, col));
         }
       } else {
         if (board.GetPieceAtSquare(kBoardSize - 1 - row, kBoardSize - 1 - col) == nullptr) {
           continue;
         } else {
-
-          ci::gl::draw(images_->RetrievePieceImage(
-              board.GetPieceAtSquare(kBoardSize - 1 - row, kBoardSize - 1 - col)),
+          Piece* to_draw = board.GetPieceAtSquare(kBoardSize - 1 - row, kBoardSize - 1 - col);
+          ci::gl::draw(images_->RetrievePieceImage(to_draw->GetPieceType(), to_draw->GetIsWhite()),
                        GetSquareAsRectf(row, col));
         }
       }
@@ -149,11 +163,13 @@ void BoardView::DrawHandPieces(Board& board) {
   }
 
   for (int i = 0; i < board.GetHandSize(is_white); i++) {
-    ci::gl::draw(images_->RetrievePieceImage(board.GetPieceInHand(is_white, i)),
+    Piece* to_draw = board.GetPieceInHand(is_white, i);
+    ci::gl::draw(images_->RetrievePieceImage(to_draw->GetPieceType(), to_draw->GetIsWhite()),
         GetHandIndexAsRectf(bounds_.bottom_box, i));
   }
   for (int i = 0; i < board.GetHandSize(!is_white); i++) {
-    ci::gl::draw(images_->RetrievePieceImage(board.GetPieceInHand(!is_white, i)),
+    Piece* to_draw = board.GetPieceInHand(!is_white, i);
+    ci::gl::draw(images_->RetrievePieceImage(to_draw->GetPieceType(), to_draw->GetIsWhite()),
                  GetHandIndexAsRectf(bounds_.top_box, i));
   }
    
@@ -163,7 +179,7 @@ void BoardView::DrawPlayers(chess::Player &player1, chess::Player &player2) {
   bool is_white = current_player_color_ == kWhiteCol;
   Player bottom;
   Player top;
-  if ( is_white && player1.is_white_) {
+  if ( is_white == player1.is_white_) {
     bottom = player1;
     top = player2;
   } else {
@@ -173,7 +189,7 @@ void BoardView::DrawPlayers(chess::Player &player1, chess::Player &player2) {
   ci::gl::color(1.0f, 1.0f, 1.0f);
   ci::vec2 bottom_loc = {bounds_.board.getX2() - 160, bounds_.board.getY2() - kBorder/2};
   const cinder::ivec2 size = {300, kBorder};
-  PrintText("Player Time Remaining: " + ReportTime(bottom.timer_.getSeconds() + kBorder/2),
+  PrintText("Player Time Remaining: " + ReportTime(bottom.timer_.getSeconds()),
       kBlackCol, bottom_loc, size);
 
   ci::gl::color(1.0f, 1.0f, 1.0f);
@@ -203,9 +219,27 @@ std::string BoardView::ReportTime(int seconds) {
 }
 
 void BoardView::DrawPawnPromotion() {
+  bool is_white = false;
+  if (current_player_color_ == kWhiteCol) {
+    is_white = true;
+  }
+      
+  ci::gl::color(kBlackCol);
+  ci::gl::drawSolidRect(bounds_.promotion_box);
+  
+  ci::gl::color(kWhiteCol);
+
+  auto first_box_UL = ci::vec2(bounds_.promotion_box.getX1() + kPromotionBoxBorderLen,
+                              bounds_.promotion_box.getY1() + kPromotionBoxBorderLen);
+  for (int i = 0; i < std::size(kPromotionChoices); i++) {
+    auto box = ci::Rectf(first_box_UL,
+                         ci::vec2(first_box_UL.x + kHandSquareLen, first_box_UL.y + kHandSquareLen));
+    ci::gl::drawSolidRect(box);
+    ci::gl::draw(images_->RetrievePieceImage(kPromotionChoices[i], is_white), box);
+    first_box_UL.x += kHandSquareLen + kPromotionBoxBorderLen;
+  }
   
 }
-
 
 ci::Rectf BoardView::GetHandIndexAsRectf(ci::Area& box_bounds, int index) {
   int row = floor(index / kBoxLenIndex);
@@ -224,7 +258,6 @@ ci::Rectf BoardView::GetSquareAsRectf(int row, int col) {
             (row+1) * kSquareLen + bounds_.board.getY1() + kBorder);
   return square;
 }
-
 
 void BoardView::PrintText(const std::string &text, const ci::Color &color, const cinder::vec2 &loc, const ci::ivec2& size) {
   cinder::gl::color(color);

@@ -26,6 +26,7 @@ public:
   Piece* Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool is_white_turn);
   bool IsValidMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool is_white_turn);
   bool HasPromotedPawn(bool is_white_turn);
+  void PromotePawn(PieceType choice, bool is_white_turn);
   
 private:
   Piece* board_[kBoardSize][kBoardSize];

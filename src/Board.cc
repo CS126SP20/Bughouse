@@ -80,9 +80,9 @@ bool Board::IsPathOpen(std::vector<std::pair<int, int>> &path) {
 bool Board::HasPromotedPawn(bool is_white_turn) {
   int row;
   if (is_white_turn) {
-    row = kBoardSize - 1;
-  } else {
     row = 0;
+  } else {
+    row = kBoardSize - 1;
   }
   
   for (int i = 0; i < kBoardSize; i++) {
@@ -91,6 +91,43 @@ bool Board::HasPromotedPawn(bool is_white_turn) {
     }
   }
   return false;
+}
+
+void Board::PromotePawn(PieceType choice, bool is_white_turn) {
+  int row;
+  if (is_white_turn) {
+    row = 0;
+  } else {
+    row = kBoardSize - 1;
+  }
+
+  for (int i = 0; i < kBoardSize; i++) {
+    if (board_[row][i] != nullptr && board_[row][i]-> GetPieceType() == PAWN) {
+      Piece* pawn = board_[row][i];
+      Piece* promotion_piece;
+      
+      switch (choice) {
+        case QUEEN :
+          promotion_piece = new Queen(is_white_turn, true);
+          break;
+        case ROOK :
+          promotion_piece = new Rook(is_white_turn, true);
+          break;
+        case KNIGHT :
+          promotion_piece = new Knight(is_white_turn, true);
+          break;
+        case BISHOP :
+          promotion_piece = new Bishop(is_white_turn, true);
+          break;
+        default :
+          promotion_piece = nullptr;
+      }
+      
+      board_[row][i] = promotion_piece;
+      
+      delete pawn;
+    }
+  }
 }
 
 void Board::ReceivePiece(Piece* piece) {

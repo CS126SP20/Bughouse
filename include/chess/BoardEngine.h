@@ -55,6 +55,7 @@ public:
 
   
 private:
+  bool is_start_;
   // A board object to represent the board
   Board board_;
 
