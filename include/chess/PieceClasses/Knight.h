@@ -26,8 +26,6 @@ namespace chess {
 
    bool IsPawn() override { return is_pawn_; }
 
-   void Reset() override { }
-
    std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
 
    void DoTurn() override {}

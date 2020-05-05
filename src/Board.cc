@@ -229,7 +229,7 @@ void Board::PromotePawn(PieceType choice, bool is_white_turn) {
 
 void Board::ReceivePiece(Piece* piece) {
   bool is_white = piece->GetIsWhite();
-  piece->Reset();
+  
   if (is_white) {
     white_player_hand_.push_back(piece);
   } else {

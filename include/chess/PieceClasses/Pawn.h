@@ -23,8 +23,6 @@ namespace chess {
 
    bool IsPawn() override { return true; }
 
-   void Reset() override { }
-
    bool Pawn::IsLegalMove(std::pair<Location, Location> turn) override;
    
    std::vector<Location> GetPath(std::pair<Location, Location> turn) override;

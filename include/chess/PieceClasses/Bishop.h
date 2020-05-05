@@ -9,29 +9,27 @@
 
 namespace chess {
 
-  class Bishop : public Piece {
+class Bishop : public Piece {
+ public:
+
+  explicit Bishop(bool is_white, bool is_pawn);
+
+  bool IsLegalMove(std::pair<Location, Location> turn) override ;
+
+  bool GetIsWhite() override { return is_white_; } 
+
+  PieceType GetPieceType() override { return BISHOP; }
+
+  bool IsPawn() override { return is_pawn_; }
+
+  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+
+  void DoTurn() override {}
+    
+ private:
     bool is_white_;
-    
     bool is_pawn_;
-    
-  public:
-
-    explicit Bishop(bool is_white, bool is_pawn);
-
-    bool IsLegalMove(std::pair<Location, Location> turn) override ;
-
-    bool GetIsWhite() override { return is_white_; } 
-
-    PieceType GetPieceType() override { return BISHOP; }
-
-    bool IsPawn() override { return is_pawn_; }
-
-    void Reset() override { }
-
-    std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
-
-    void DoTurn() override {}
-  };
+};
 
 }
 
