@@ -11,23 +11,24 @@
 namespace chess {
 
 class King : public Piece {
-    bool is_white_;
+ public:
+  explicit King(bool is_white);
 
-  public:
-    explicit King(bool is_white);
+  bool IsLegalMove(std::pair<Location, Location> turn);
 
-    bool IsLegalMove(std::pair<Location, Location> turn);
+  bool GetIsWhite() { return is_white_; }
 
-    bool GetIsWhite() { return is_white_; }
-
-    PieceType GetPieceType() { return KING; }
+  PieceType GetPieceType() { return KING; }
     
-    bool IsPawn() override { return false; }
+  bool IsPawn() override { return false; }
 
-    std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
 
-    void DoTurn() override { }
-  };
+  void DoTurn() override { }
+  
+ private:
+  bool is_white_;
+};
 
 }
 
