@@ -39,8 +39,12 @@ private:
   bool IsPathOpen(std::vector<Location>& path);
   bool can_white_castle_;
   bool can_black_castle_;
+  int en_pass_col_;
+  bool is_en_pass_;
+  void UpdateEnPassCol(std::pair<Location, Location> turn, bool is_white_turn);
+  bool CanEnPass(Location pawn_destination, bool is_white_turn);
   bool CanCastle(bool is_white_turn);  
-  
+  Piece* EnPass(Location pawn_destination, bool is_white_turn);
   void TurnOffCastle(bool is_white_turn);
   void Castle(std::pair<Location, Location> turn);
 

@@ -46,6 +46,7 @@ private:
   void DrawHandPieces(Board& board);
   void DrawTurns(std::pair<Location, Location> turn,
                  std::pair<Location, Location> last_turn);
+  void DrawTurnSquare(Location location, bool is_white, ci::Color color);
 
   void DrawPlayers(Player& player1, Player& player2);
   ci::Rectf GetSquareAsRectf(Location& location);

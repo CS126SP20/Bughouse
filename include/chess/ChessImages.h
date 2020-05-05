@@ -19,13 +19,13 @@ const double kSquareLen = 71.2;
 const double kHandSquareLen = 55;
 const int kBoxLenIndex = 4;
 const int kBoxHeightIndex = 5; 
-const auto kGreyCol = ci::Color(1.0f * 91/256, 1.0f * 89/256, 1.0f * 89/256);
-const auto kBlackCol = ci::Color(1.0f * 62/256, 1.0f * 54/256, 1.0f * 52/256);
-const auto kWhiteCol = ci::Color(1.0f * 248 /256, 1.0f * 244/256, 1.0f * 236/256);
-const auto kYellowCol = ci::Color(1.0f * 255 /256, 1.0f * 255/256, 1.0f * 102/256);
-const auto kRedCol = ci::Color(1.0f * 255 /256, 1.0f * 99/256, 1.0f * 71/256);
+const auto kGreyCol = ci::Color(1.0f * 91/255, 1.0f * 89/255, 1.0f * 89/255);
+const auto kBlackCol = ci::Color(1.0f * 62/255, 1.0f * 54/255, 1.0f * 52/255);
+const auto kWhiteCol = ci::Color(1.0f * 248 /255, 1.0f * 244/255, 1.0f * 236/255);
+const auto kYellowCol = ci::Color(1.0f * 255 /255, 1.0f * 255/255, 1.0f * 102/255);
+const auto kRedCol = ci::Color(1.0f * 255 /255, 1.0f * 150/255, 1.0f * 79/255);
 
-//TODO:Write destructor
+
 class ChessImages {
   public:
     void SetUp();

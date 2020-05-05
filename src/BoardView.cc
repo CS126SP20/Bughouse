@@ -136,7 +136,29 @@ void BoardView::DrawBoard() {
 
 void BoardView::DrawTurns(std::pair<Location, Location> turn,
                           std::pair<Location, Location> last_turn) {
+  bool is_white = kWhiteCol == current_player_color_;
+  DrawTurnSquare(turn.first, is_white, kYellowCol);
+  if (last_turn.first.Col() != EMPTY) DrawTurnSquare(last_turn.first, is_white, kRedCol);
+  DrawTurnSquare(last_turn.second, is_white, kRedCol);
   
+}
+
+void BoardView::DrawTurnSquare(chess::Location location, bool is_white, ci::Color color) {
+  if (!location.IsEmpty()) {
+    ci::gl::color(color);
+    Location loc = location;
+    if (!is_white && location.Col() != EMPTY) {
+      loc = Location(kBoardSize - 1 - location.Row(), kBoardSize - 1 - location.Col());
+    }
+    
+    ci::Rectf to_draw;
+    if (location.Col() == EMPTY) {
+      to_draw = GetHandIndexAsRectf(bounds_.bottom_box, location.Row());
+    } else {
+      to_draw = GetSquareAsRectf(loc);
+    }
+    ci::gl::drawSolidRect(to_draw);
+  }
 }
 
 void BoardView::DrawPieces(Board& board) {

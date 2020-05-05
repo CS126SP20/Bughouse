@@ -17,7 +17,9 @@ namespace chess {
 
 Board::Board()
   : can_black_castle_{true},
-    can_white_castle_{true} 
+    can_white_castle_{true},
+    en_pass_col_(EMPTY),
+    is_en_pass_(false)
     {
   SetUpBoard();
 }  
@@ -31,7 +33,20 @@ Piece* Board::Update(std::pair<Location, Location> turn, bool is_white_turn) {
     
   } else {
     Piece* to_move = board_[turn.first.Row()][turn.first.Col()];
-    captured = board_[turn.second.Row()][turn.second.Col()];
+    
+    if (to_move->GetPieceType() == PAWN && abs(turn.second.Row() - turn.first.Row()) == 2) {
+      en_pass_col_ = turn.second.Col();
+      is_en_pass_ = false;
+    } else if (is_en_pass_) {
+      captured = EnPass(turn.second, is_white_turn);
+      en_pass_col_ = EMPTY;
+      is_en_pass_ = false;
+    } else {
+      captured = board_[turn.second.Row()][turn.second.Col()];
+      is_en_pass_ = false;
+      en_pass_col_ = EMPTY;
+    }
+    
     
     if (CanCastle(is_white_turn) && (to_move->GetPieceType() == ROOK || to_move->GetPieceType() == KING)) {
       TurnOffCastle(is_white_turn);
@@ -52,6 +67,18 @@ Piece* Board::Update(std::pair<Location, Location> turn, bool is_white_turn) {
     
   }
 
+  return captured;
+}
+
+Piece* Board::EnPass(Location pawn_destination, bool is_white_turn) {
+  Piece* captured;
+  if (is_white_turn) {
+    captured = board_[pawn_destination.Row() + 1][en_pass_col_];
+    board_[pawn_destination.Row() + 1][en_pass_col_] = nullptr;
+  } else {
+    captured = board_[pawn_destination.Row() - 1][en_pass_col_];
+    board_[pawn_destination.Row() - 1][en_pass_col_] = nullptr;
+  }
   return captured;
 }
 
@@ -106,6 +133,7 @@ bool Board::IsValidMove(std::pair<Location, Location> turn, bool is_white_turn) 
     if (IsPathOpen(path)) {
       if (to_move->GetPieceType() == PAWN && path.size() == 0) {
         if (board_[turn.second.Row()][turn.second.Col()] != nullptr) is_valid = true;
+        else is_valid = CanEnPass(turn.second, is_white_turn);
       } else if (to_move->GetPieceType() == KING && abs(turn.first.Col() - turn.second.Col()) > 1) { 
         is_valid = CanCastle(is_white_turn);
       } else {
@@ -115,6 +143,24 @@ bool Board::IsValidMove(std::pair<Location, Location> turn, bool is_white_turn) 
   }
   
   return is_valid;
+}
+
+bool Board::CanEnPass(chess::Location pawn_destination, bool is_white_turn) {
+  if (pawn_destination.Col() == en_pass_col_) {
+    bool valid;
+    if (is_white_turn) {
+      valid = pawn_destination.Row() == 2;
+    } else {
+      valid = pawn_destination.Row() == 5;
+    }
+    
+    is_en_pass_ = valid;
+    return valid;
+    
+  } else {
+    is_en_pass_ = false;
+    return false;
+  }
 }
 
 bool Board::IsPathOpen(std::vector<Location> &path) {
