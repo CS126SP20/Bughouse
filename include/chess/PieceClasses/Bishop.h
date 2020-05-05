@@ -18,7 +18,7 @@ namespace chess {
 
     explicit Bishop(bool is_white, bool is_pawn);
 
-    bool IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override ;
+    bool IsLegalMove(std::pair<Location, Location> turn) override ;
 
     bool GetIsWhite() override { return is_white_; } 
 
@@ -28,7 +28,7 @@ namespace chess {
 
     void Reset() override { }
 
-    std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+    std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
 
     void DoTurn() override {}
   };

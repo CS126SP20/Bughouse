@@ -8,7 +8,6 @@
 #include <cinder/gl/gl.h>
 #include <chess/Piece.h>
 #include "chess/Board.h"
-#include "chess/Engine.h"
 #include <ciAnimatedGif.h>
 
 namespace myapp {
@@ -48,11 +47,9 @@ void MyApp::setup() {
   Player team2_player1{ ci::Timer(false), false, kTeam2Color, kTeam2};
   Player team2_player2{ ci::Timer(true), true, kTeam2Color, kTeam2};
   
-  left_engine_ = chess::BoardEngine(chess_images_, true,
-                                    left_board_bounds, top_left_box_bounds, low_left_box_bounds,
+  left_engine_ = chess::BoardEngine(chess_images_, left_board_bounds, top_left_box_bounds, low_left_box_bounds,
                                     team1_player1, team2_player1);
-  right_engine_ = chess::BoardEngine(chess_images_, true,
-                                     right_board_bounds, top_right_box_bounds, low_right_box_bounds,
+  right_engine_ = chess::BoardEngine(chess_images_, right_board_bounds, top_right_box_bounds, low_right_box_bounds,
                                      team2_player2, team1_player2);
 }
 

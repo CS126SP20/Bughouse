@@ -12,14 +12,14 @@ Pawn::Pawn(bool is_white)
     can_double_move_{true}
   { }
 
-bool Pawn::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-  if (turn.first.second == EMPTY) {
+bool Pawn::IsLegalMove(std::pair<Location, Location> turn) {
+  if (turn.first.Col() == EMPTY) {
     if (is_white_) {
-      if (turn.second.first == 0) {
+      if (turn.second.Row() == 0) {
         return false;
       }
     } else {
-      if (turn.second.first == kBoardSize - 1) {
+      if (turn.second.Row() == kBoardSize - 1) {
         return false;
       }
     }
@@ -27,30 +27,30 @@ bool Pawn::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
   }
   
   bool is_valid = false;
-  if (turn.first.second == turn.second.second) {
+  if (turn.first.Col() == turn.second.Col()) {
     if (is_white_) {
-      if (turn.first.first == turn.second.first + 1) {
+      if (turn.first.Row() == turn.second.Row() + 1) {
         is_valid = true;
-      } else if (can_double_move_ && turn.first.first == turn.second.first + 2) {
+      } else if (can_double_move_ && turn.first.Row() == turn.second.Row() + 2) {
         is_valid = true;
       }
     } else {
-      if (turn.first.first == turn.second.first - 1) {
+      if (turn.first.Row() == turn.second.Row() - 1) {
         is_valid = true;
-      } else if (can_double_move_ && turn.first.first == turn.second.first - 2) {
+      } else if (can_double_move_ && turn.first.Row() == turn.second.Row() - 2) {
         is_valid = true;
       }
     }
   }
   
   
-  if (abs(turn.first.second - turn.second.second) == 1) {
+  if (abs(turn.first.Col() - turn.second.Col()) == 1) {
     if (is_white_) {
-      if (turn.first.first == turn.second.first + 1) {
+      if (turn.first.Row() == turn.second.Row() + 1) {
         is_valid = true;
       }
     } else {
-      if (turn.first.first == turn.second.first - 1) {
+      if (turn.first.Row() == turn.second.Row() - 1) {
         is_valid = true;
       }
     }
@@ -60,25 +60,25 @@ bool Pawn::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
   return is_valid;
 }
 
-std::vector<std::pair<int,int>> Pawn::GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-  std::vector<std::pair<int,int>> path;
+std::vector<Location> Pawn::GetPath(std::pair<Location, Location> turn) {
+  std::vector<Location> path;
   
-  if (turn.first.second == EMPTY) {
+  if (turn.first.Col() == EMPTY) {
     path.push_back(turn.second);
     can_double_move_ = false;
     return path;
   }
   
-  if (abs(turn.first.second - turn.second.second) == 1) {
+  if (abs(turn.first.Col() - turn.second.Col()) == 1) {
     return path;
   }
   
-  if (turn.first.first == turn.second.first + 2) {
-    auto point = std::make_pair(turn.second.first + 1, turn.second.second);
+  if (turn.first.Row() == turn.second.Row() + 2) {
+    auto point = Location(turn.second.Row() + 1, turn.second.Col());
     path.push_back(point);
     is_poss_double_move_ = true;
-  } else if (turn.first.first == turn.second.first - 2) {
-    auto point = std::make_pair(turn.second.first - 1, turn.second.second);
+  } else if (turn.first.Row() == turn.second.Row() - 2) {
+    auto point = Location(turn.second.Row() - 1, turn.second.Col());
     path.push_back(point);
     is_poss_double_move_ = true;
   } else {

@@ -11,18 +11,18 @@ namespace chess {
     : is_white_(is_white),
       is_pawn_{is_pawn} {}
   
-  bool Bishop::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-    return (turn.first.second == EMPTY)
-            || abs(turn.first.first - turn.second.first) == abs(turn.first.second - turn.second.second);
+  bool Bishop::IsLegalMove(std::pair<Location, Location> turn) {
+    return (turn.first.Col() == EMPTY)
+            || abs(turn.first.Row() - turn.second.Row()) == abs(turn.first.Col() - turn.second.Col());
   }
 
-  std::vector<std::pair<int,int>> Bishop::GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-    std::vector<std::pair<int,int>> path;
+  std::vector<Location> Bishop::GetPath(std::pair<Location, Location> turn) {
+    std::vector<Location> path;
     
-    int row1 = turn.first.first;
-    int col1 = turn.first.second;
-    int row2 = turn.second.first;
-    int col2 = turn.second.second;
+    int row1 = turn.first.Row();
+    int col1 = turn.first.Col();
+    int row2 = turn.second.Row();
+    int col2 = turn.second.Col();
 
     if (col1 == EMPTY) {
       path.push_back(turn.second);
@@ -47,7 +47,7 @@ namespace chess {
     while ((abs(col1 - col2) > 1 ) && (abs(row1 - row2) > 1)) {
       col1 += sign_x;
       row1 += sign_y;
-      auto point = std::make_pair(row1, col1);
+      auto point = Location(row1, col1);
       path.push_back(point);
     }
 

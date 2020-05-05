@@ -12,18 +12,18 @@ namespace chess {
     : is_white_(is_white),
       is_pawn_{is_pawn} {}
 
-  bool Rook::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-    return (turn.first.second == EMPTY) // Moved from the hand to the board
-          || (turn.first.first == turn.second.first)  // Moving horizontally
-          || (turn.first.second == turn.second.second); // Moving vertically
+  bool Rook::IsLegalMove(std::pair<Location, Location> turn) {
+    return (turn.first.Col() == EMPTY) // Moved from the hand to the board
+          || (turn.first.Row() == turn.second.Row())  // Moving horizontally
+          || (turn.first.Col() == turn.second.Col()); // Moving vertically
   }    
 
-  std::vector<std::pair<int,int>> Rook::GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-    std::vector<std::pair<int,int>> path;
-    int row1 = turn.first.first;
-    int col1 = turn.first.second;
-    int row2 = turn.second.first;
-    int col2 = turn.second.second;
+  std::vector<Location> Rook::GetPath(std::pair<Location,Location> turn) {
+    std::vector<Location> path;
+    int row1 = turn.first.Row();
+    int col1 = turn.first.Col();
+    int row2 = turn.second.Row();
+    int col2 = turn.second.Col();
     
     if (col1 == EMPTY) {
       path.push_back(turn.second);
@@ -34,14 +34,14 @@ namespace chess {
       int min_col = std::min(col1, col2);
       int max_col = std::max(col1, col2);
       for (int col = min_col + 1; col < max_col; col++) {
-        auto path_point = std::make_pair(row1, col);
+        auto path_point = Location(row1, col);
         path.push_back(path_point);
       }
     } else if (col1 == col2) {
       int min_row = std::min(row1, row2);
       int max_row = std::max(row1, row2);
       for (int row = min_row + 1; row < max_row; row++) {
-        auto path_point = std::make_pair(row, col1);
+        auto path_point = Location(row, col1);
         path.push_back(path_point);
       }
     }

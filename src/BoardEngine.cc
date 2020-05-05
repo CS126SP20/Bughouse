@@ -9,16 +9,16 @@
 
 namespace chess {
   
-BoardEngine::BoardEngine(ChessImages* chess_image, bool is_white, 
-    ci::Area board_bounds, ci::Area top_box_bounds,
-    ci::Area bottom_box_bounds, Player team1_player, Player team2_player)
-    : turn_{{EMPTY,EMPTY},{EMPTY,EMPTY}},
-      is_white_turn_{is_white},
-      board_view_{chess_image, is_white, board_bounds, top_box_bounds, bottom_box_bounds},
+BoardEngine::BoardEngine(ChessImages *chess_images, ci::Area board_bounds, ci::Area top_box_bounds,
+                         ci::Area bottom_box_bounds,
+                         Player team1_player, Player team2_player)
+    : turn_{Location(),Location()},
+      last_turn_{Location(),Location()},
+      board_view_{chess_images, board_bounds, top_box_bounds, bottom_box_bounds},
       team_2_player_{std::move(team2_player)},
       team_1_player_{std::move(team1_player)},
       current_game_state_{GameState::kPlaying},
-      is_start_{true}
+      is_white_turn_{true}
     {
 }
 
@@ -28,11 +28,6 @@ void BoardEngine::CheckTimeOut() {
   } else if (team_1_player_.timer_.getSeconds() >= kMaxSeconds) {
     current_game_state_ = GameState::kTeam2Win;
   }
-}
-
-
-bool BoardEngine::IsMoveEmpty(std::pair<int,int> move) {
-  return move.first == EMPTY && move.second == EMPTY;
 }
 
 
@@ -47,9 +42,9 @@ void BoardEngine::ProcessClick(ci::vec2 point) {
     return;
   }
   
-  std::pair<int,int> click = board_view_.ProcessClick(point);
-  if (!IsMoveEmpty(click)) {
-    if (click.second == EMPTY) {
+  Location click = board_view_.ProcessClick(point);
+  if (!click.IsEmpty()) {
+    if (click.Col() == EMPTY) {
       UpdateTurnWithBoxClick(click);
     } else {
       UpdateTurnWithBoardClick(click);
@@ -57,29 +52,29 @@ void BoardEngine::ProcessClick(ci::vec2 point) {
   }
 }
 
-void BoardEngine::UpdateTurnWithBoardClick(std::pair<int, int> click) {
-  Piece* piece = board_.GetPieceAtSquare(click.first, click.second);
+void BoardEngine::UpdateTurnWithBoardClick(Location& click) {
+  Piece* piece = board_.GetPieceAtSquare(click);
   
   if (piece != nullptr && (piece->GetIsWhite() == is_white_turn_)) {
     if (turn_.first == click) {
-      turn_.first = std::make_pair(EMPTY, EMPTY);
+      turn_.first.Empty();
     } else {
       turn_.first = click;
     }
-  } else if (!IsMoveEmpty(turn_.first) && IsMoveEmpty(turn_.second) 
+  } else if (!turn_.first.IsEmpty() && turn_.second.IsEmpty()
             && (piece == nullptr || piece->GetIsWhite() != is_white_turn_)) {
     if (board_.IsValidMove(std::make_pair(turn_.first, click), is_white_turn_)) {
       turn_.second = click;
     } else {
-      turn_.first = std::make_pair(EMPTY, EMPTY);
+      turn_.first.Empty();
     }
     
   }
   
 }
 
-void BoardEngine::UpdateTurnWithBoxClick(std::pair<int, int> click) {
-  if (click.first < 0 || click.first >= board_.GetHandSize(is_white_turn_)) return;
+void BoardEngine::UpdateTurnWithBoxClick(Location& click) {
+  if (click.Row() < 0 || click.Col() >= board_.GetHandSize(is_white_turn_)) return;
   turn_.first = click;
 }
 
@@ -94,7 +89,7 @@ Piece* BoardEngine::Move() {
   }
   Piece* captured = nullptr;
   
-  if (!IsMoveEmpty(turn_.first) && !IsMoveEmpty(turn_.second)) {
+  if (!turn_.first.IsEmpty() && !turn_.second.IsEmpty()) {
     
     captured = board_.Update(turn_, is_white_turn_);
     
@@ -109,7 +104,9 @@ Piece* BoardEngine::Move() {
 }
 
 void BoardEngine::SwapTurns() {
-  turn_ = std::make_pair(std::make_pair(EMPTY, EMPTY), std::make_pair(EMPTY, EMPTY));
+  last_turn_ = turn_;
+  turn_.first.Empty();
+  turn_.second.Empty();
   is_white_turn_ = !is_white_turn_;
   board_view_.SwapCurrentPlayerColor();
   if (team_1_player_.is_white_ == is_white_turn_) {
@@ -139,7 +136,7 @@ GameState BoardEngine::UpdateGameState(Piece* captured) {
 }
 
 void BoardEngine::Draw() {
-  board_view_.Draw(board_, team_1_player_, team_2_player_);
+  board_view_.Draw(board_, team_1_player_, team_2_player_, turn_, last_turn_);
   if (current_game_state_ == GameState::kPawnPromotion) {
     board_view_.DrawPawnPromotion();
   }

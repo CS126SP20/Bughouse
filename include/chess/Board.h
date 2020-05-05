@@ -9,6 +9,7 @@
 #include "Piece.h"
 #include "vector"
 #include <cinder/Area.h>
+#include "Location.h"
 
 namespace chess {
   const int kBoardSize = 8;
@@ -18,13 +19,13 @@ class Board {
 public:
   Board();
   
-  Piece* GetPieceAtSquare(int row, int col);
+  Piece* GetPieceAtSquare(Location& loc);
   Piece* GetPieceInHand(bool is_white, int index);
   Piece* GetAndRemoveFromHand(bool is_white, int index);
   void ReceivePiece(Piece* piece);
   int GetHandSize(bool is_white);
-  Piece* Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool is_white_turn);
-  bool IsValidMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool is_white_turn);
+  Piece* Update(std::pair<Location, Location> turn, bool is_white_turn);
+  bool IsValidMove(std::pair<Location, Location> turn, bool is_white_turn);
   bool HasPromotedPawn(bool is_white_turn);
   void PromotePawn(PieceType choice, bool is_white_turn);
   
@@ -35,13 +36,13 @@ private:
   std::vector<Piece*> black_player_hand_;
   std::vector<Piece*> white_player_hand_;
   void SetUpBoard();
-  bool IsPathOpen(std::vector<std::pair<int,int>>& path);
+  bool IsPathOpen(std::vector<Location>& path);
   bool can_white_castle_;
   bool can_black_castle_;
   bool CanCastle(bool is_white_turn);  
   
   void TurnOffCastle(bool is_white_turn);
-  void Castle(std::pair<std::pair<int, int>, std::pair<int, int>> turn);
+  void Castle(std::pair<Location, Location> turn);
 
 
 };  

@@ -22,20 +22,20 @@ Board::Board()
   SetUpBoard();
 }  
 
-Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool is_white_turn) {
+Piece* Board::Update(std::pair<Location, Location> turn, bool is_white_turn) {
   Piece* captured = nullptr;
-  if (turn.first.second == EMPTY) {
-    Piece* to_move = GetAndRemoveFromHand(is_white_turn, turn.first.first);
+  if (turn.first.Col() == EMPTY) {
+    Piece* to_move = GetAndRemoveFromHand(is_white_turn, turn.first.Row());
     to_move->DoTurn();
-    board_[turn.second.first][turn.second.second] = to_move;
+    board_[turn.second.Row()][turn.second.Col()] = to_move;
     
   } else {
-    Piece* to_move = board_[turn.first.first][turn.first.second];
-    captured = board_[turn.second.first][turn.second.second];
+    Piece* to_move = board_[turn.first.Row()][turn.first.Col()];
+    captured = board_[turn.second.Row()][turn.second.Col()];
     
     if (CanCastle(is_white_turn) && (to_move->GetPieceType() == ROOK || to_move->GetPieceType() == KING)) {
       TurnOffCastle(is_white_turn);
-      if (to_move->GetPieceType() == KING && abs(turn.first.second - turn.second.second) > 1) {
+      if (to_move->GetPieceType() == KING && abs(turn.first.Col() - turn.second.Col()) > 1) {
         Castle(turn);
         return nullptr;
       }
@@ -46,31 +46,31 @@ Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool
       captured = new Pawn(captured->GetIsWhite());
       delete to_delete;
     }
-    board_[turn.second.first][turn.second.second] = to_move;
+    board_[turn.second.Row()][turn.second.Col()] = to_move;
     to_move->DoTurn();
-    board_[turn.first.first][turn.first.second] = nullptr;
+    board_[turn.first.Row()][turn.first.Col()] = nullptr;
     
   }
 
   return captured;
 }
 
-void Board::Castle(std::pair<std::pair<int, int>, std::pair<int, int>> turn) {
-  board_[turn.second.first][turn.second.second] = board_[turn.first.first][turn.first.second];
-  board_[turn.first.first][turn.first.second] = nullptr;
+void Board::Castle(std::pair<Location, Location> turn) {
+  board_[turn.second.Row()][turn.second.Col()] = board_[turn.first.Row()][turn.first.Col()];
+  board_[turn.first.Row()][turn.first.Col()] = nullptr;
 
-  std::pair<int,int> start_rook_loc;
-  std::pair<int,int> new_rook_loc;
-  if (turn.second.second == 2) {
-    start_rook_loc = std::make_pair(turn.second.first, 0);
-    new_rook_loc = std::make_pair(turn.second.first, turn.second.second + 1);
+  Location start_rook_loc;
+  Location new_rook_loc;
+  if (turn.second.Col() == 2) {
+    start_rook_loc = Location(turn.second.Row(), 0);
+    new_rook_loc = Location(turn.second.Row(), turn.second.Col() + 1);
   } else {
-    start_rook_loc = std::make_pair(turn.second.first, kBoardSize - 1);
-    new_rook_loc = std::make_pair(turn.second.first, turn.second.second - 1);
+    start_rook_loc = Location(turn.second.Row(), kBoardSize - 1);
+    new_rook_loc = Location(turn.second.Row(), turn.second.Col() - 1);
   }
   
-  board_[new_rook_loc.first][new_rook_loc.second] = board_[start_rook_loc.first][start_rook_loc.second];
-  board_[start_rook_loc.first][start_rook_loc.second] = nullptr;
+  board_[new_rook_loc.Row()][new_rook_loc.Col()] = board_[start_rook_loc.Row()][start_rook_loc.Col()];
+  board_[start_rook_loc.Row()][start_rook_loc.Col()] = nullptr;
   
 }
 
@@ -92,21 +92,21 @@ void Board::TurnOffCastle(bool is_white_turn) {
 
 
 
-bool Board::IsValidMove(std::pair<std::pair<int, int>, std::pair<int, int> > turn, bool is_white_turn) {
+bool Board::IsValidMove(std::pair<Location, Location> turn, bool is_white_turn) {
   Piece* to_move;
-  if (turn.first.second == EMPTY) {
-    to_move = GetPieceInHand(is_white_turn, turn.first.first);
+  if (turn.first.Col() == EMPTY) {
+    to_move = GetPieceInHand(is_white_turn, turn.first.Row());
   } else {
-    to_move = GetPieceAtSquare(turn.first.first, turn.first.second);
+    to_move = GetPieceAtSquare(turn.first);
   }
   
   bool is_valid = false;
   if (to_move->IsLegalMove(turn)) {
-    std::vector<std::pair<int,int>> path = to_move->GetPath(turn);
+    std::vector<Location> path = to_move->GetPath(turn);
     if (IsPathOpen(path)) {
       if (to_move->GetPieceType() == PAWN && path.size() == 0) {
-        if (board_[turn.second.first][turn.second.second] != nullptr) is_valid = true;
-      } else if (to_move->GetPieceType() == KING && abs(turn.first.second - turn.second.second) > 1) { 
+        if (board_[turn.second.Row()][turn.second.Col()] != nullptr) is_valid = true;
+      } else if (to_move->GetPieceType() == KING && abs(turn.first.Col() - turn.second.Col()) > 1) { 
         is_valid = CanCastle(is_white_turn);
       } else {
         is_valid = true;
@@ -117,10 +117,10 @@ bool Board::IsValidMove(std::pair<std::pair<int, int>, std::pair<int, int> > tur
   return is_valid;
 }
 
-bool Board::IsPathOpen(std::vector<std::pair<int, int>> &path) {
+bool Board::IsPathOpen(std::vector<Location> &path) {
   bool is_open = true;
-  for (std::pair<int,int> point : path) {
-    if (GetPieceAtSquare(point.first, point.second) != nullptr) {
+  for (Location loc : path) {
+    if (GetPieceAtSquare(loc) != nullptr) {
       is_open = false;
       break;
     }
@@ -191,8 +191,8 @@ void Board::ReceivePiece(Piece* piece) {
   }
 }
 
-Piece* Board::GetPieceAtSquare(int row, int col) {
-  return board_[row][col];
+Piece* Board::GetPieceAtSquare(Location& loc) {
+  return board_[loc.Row()][loc.Col()];
 }
 
 Piece* Board::GetPieceInHand(bool is_white, int index) {

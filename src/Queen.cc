@@ -11,14 +11,14 @@ namespace chess {
     : is_white_(is_white),
       is_pawn_{is_pawn} {}
 
-  bool Queen::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
+  bool Queen::IsLegalMove(std::pair<Location, Location> turn) {
     Rook rook(is_white_, false);
     Bishop bishop(is_white_, false);
     return rook.IsLegalMove(turn) || bishop.IsLegalMove(turn);
   }
 
-  // TODO: Make a rook or a bishop and return their path.
-  std::vector<std::pair<int,int>> Queen::GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
+
+  std::vector<Location> Queen::GetPath(std::pair<Location, Location> turn) {
     Rook rook(is_white_, false);
     Bishop bishop(is_white_, false);
     if (rook.IsLegalMove(turn)) {

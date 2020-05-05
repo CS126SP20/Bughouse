@@ -7,13 +7,14 @@
 #include <cinder/gl/Texture.h>
 #include <cinder/gl/draw.h>
 #include <cinder/app/App.h>
-#include <chess/BoardEngine.h>
+#include "chess/BoardEngine.h"
+
 
 
 namespace chess {
 
 BoardView::BoardView(ChessImages* chess_image,
-    bool is_white, ci::Area board_bounds, ci::Area top_box_bounds, ci::Area bottom_box_bounds)
+    ci::Area board_bounds, ci::Area top_box_bounds, ci::Area bottom_box_bounds)
 {
   bounds_.board = board_bounds;
   bounds_.bottom_box = bottom_box_bounds;
@@ -25,18 +26,15 @@ BoardView::BoardView(ChessImages* chess_image,
                                board_center.y + kPromotionBoxBorderLen + kHandSquareLen/2);
   bounds_.promotion_box = ci::Area(promotion_UL, promotion_LR);
   
-  if (is_white) {
-    current_player_color_ = kWhiteCol;
-    current_opponent_color_ = kBlackCol;
-  } else {
-    current_player_color_ = kBlackCol;
-    current_opponent_color_ = kWhiteCol;
-  }
+
+  current_player_color_ = kWhiteCol;
+  current_opponent_color_ = kBlackCol;
+
   images_ = chess_image;
 }
 
-std::pair<int, int> BoardView::ProcessClick(ci::vec2 point) {
-  std::pair<int,int> click_loc = std::make_pair(EMPTY, EMPTY);
+Location BoardView::ProcessClick(ci::vec2 point) {
+  Location click_loc = Location();
   
   if (point.x > bounds_.board.getX1() + kBorder && point.x < bounds_.board.getX2() - kBorder
       && point.y > bounds_.board.getY1() + kBorder && point.y < bounds_.board.getY2() - kBorder) {
@@ -66,25 +64,25 @@ PieceType BoardView::GetPieceTypeFromClick(ci::vec2 click) {
 }
 
 
-std::pair<int,int> BoardView::GetBoardSquareAtPoint(ci::vec2 point) {
+Location BoardView::GetBoardSquareAtPoint(ci::vec2 point) {
   int col = std::floor((point.x - bounds_.board.getX1() - kBorder) / kSquareLen);
   int row = std::floor((point.y - bounds_.board.getY1() - kBorder) / kSquareLen);
   if (col < 0 || row < 0 || col >= kBoardLen || row >= kBoardLen) {
-    return std::make_pair(EMPTY,EMPTY);
+    return Location();
   } else if (current_player_color_ == kWhiteCol) {
-    return std::make_pair(row , col);
+    return Location(row , col);
   } else {
-    return std::make_pair(kBoardSize - 1 - row, kBoardSize - 1 - col);
+    return Location(kBoardSize - 1 - row, kBoardSize - 1 - col);
   }
 }
 
-std::pair<int,int> BoardView::GetHandIndexAtPoint(ci::vec2 point) {
+Location BoardView::GetHandIndexAtPoint(ci::vec2 point) {
   int col = std::floor((point.x - bounds_.bottom_box.getX1()) / kHandSquareLen);
   int row = std::floor((point.y - bounds_.bottom_box.getY1()) / kHandSquareLen);
   if (col < 0 || row < 0 || col >= kBoxLenIndex || row >= kBoxHeightIndex) {
-    return std::make_pair(EMPTY,EMPTY);
+    return Location();
   } else {
-    return std::make_pair(col + row*kBoxLenIndex, EMPTY);
+    return Location(col + row*kBoxLenIndex, EMPTY);
   }
 }
 
@@ -98,11 +96,15 @@ void BoardView::SwapCurrentPlayerColor() {
   }
 }
 
-void BoardView::Draw(Board& board, Player team1, Player team2) {
+void BoardView::Draw(Board& board, Player& team1, Player& team2,
+                     std::pair<Location, Location> turn,
+                     std::pair<Location, Location> last_turn) {
   ci::gl::color(1.0f,1.0f,1.0f);
   DrawBoxes();
   ci::gl::color(1.0f, 1.0f, 1.0f);
   DrawBoard();
+  ci::gl::color(1.0f, 1.0f, 1.0f);
+  DrawTurns(turn, last_turn);
   ci::gl::color(1.0f, 1.0f, 1.0f);
   DrawPieces(board);
   ci::gl::color(1.0f, 1.0f, 1.0f);
@@ -132,24 +134,32 @@ void BoardView::DrawBoard() {
 
 }
 
+void BoardView::DrawTurns(std::pair<Location, Location> turn,
+                          std::pair<Location, Location> last_turn) {
+  
+}
+
 void BoardView::DrawPieces(Board& board) {
   for (int row = 0; row < chess::kBoardSize; row++) {
     for (int col = 0; col < chess:: kBoardSize; col++) {
       if (current_player_color_ == kWhiteCol) {
-        if (board.GetPieceAtSquare(row, col) == nullptr) {
+        Location square = Location(row, col);
+        if (board.GetPieceAtSquare(square) == nullptr) {
           continue;
         } else {
-          Piece* to_draw = board.GetPieceAtSquare(row, col);
+          Piece* to_draw = board.GetPieceAtSquare(square);
           ci::gl::draw(images_->RetrievePieceImage(to_draw->GetPieceType(), to_draw->GetIsWhite()),
-                       GetSquareAsRectf(row, col));
+                       GetSquareAsRectf(square));
         }
       } else {
-        if (board.GetPieceAtSquare(kBoardSize - 1 - row, kBoardSize - 1 - col) == nullptr) {
+        Location square = Location(kBoardSize - 1 - row, kBoardSize - 1 - col);
+        if (board.GetPieceAtSquare(square) == nullptr) {
           continue;
         } else {
-          Piece* to_draw = board.GetPieceAtSquare(kBoardSize - 1 - row, kBoardSize - 1 - col);
+          Piece* to_draw = board.GetPieceAtSquare(square);
+          Location loc = Location(row, col);
           ci::gl::draw(images_->RetrievePieceImage(to_draw->GetPieceType(), to_draw->GetIsWhite()),
-                       GetSquareAsRectf(row, col));
+                       GetSquareAsRectf(loc));
         }
       }
     }
@@ -251,11 +261,11 @@ ci::Rectf BoardView::GetHandIndexAsRectf(ci::Area& box_bounds, int index) {
   return square;
 }
 
-ci::Rectf BoardView::GetSquareAsRectf(int row, int col) {
-  auto square = ci::Rectf(col * kSquareLen + bounds_.board.getX1() + kBorder, 
-            row * kSquareLen + bounds_.board.getY1() + kBorder,
-            (col+1) * kSquareLen + bounds_.board.getX1() + kBorder, 
-            (row+1) * kSquareLen + bounds_.board.getY1() + kBorder);
+ci::Rectf BoardView::GetSquareAsRectf(Location& location) {
+  auto square = ci::Rectf(location.Col() * kSquareLen + bounds_.board.getX1() + kBorder, 
+            location.Row() * kSquareLen + bounds_.board.getY1() + kBorder,
+            (location.Col()+1) * kSquareLen + bounds_.board.getX1() + kBorder, 
+            (location.Row()+1) * kSquareLen + bounds_.board.getY1() + kBorder);
   return square;
 }
 

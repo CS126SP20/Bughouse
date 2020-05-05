@@ -17,7 +17,7 @@ class Queen : public Piece {
 
     explicit Queen(bool is_white, bool is_pawn);
 
-    bool IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+    bool IsLegalMove(std::pair<Location, Location> turn) override;
 
     bool GetIsWhite() override { return is_white_; }
 
@@ -27,7 +27,7 @@ class Queen : public Piece {
 
     void Reset() override { }
 
-    std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+    std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
 
     void DoTurn() override {}
   };

@@ -10,7 +10,6 @@
 #include "chess/PieceClasses/Knight.h"
 #include "utility"
 #include "chess/Board.h"
-#include "chess/Engine.h"
 #include "chess/ChessImages.h"
 #include "ciAnimatedGif.h"
 

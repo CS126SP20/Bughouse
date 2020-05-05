@@ -9,9 +9,9 @@
 namespace chess {
   King::King(bool is_white) : is_white_(is_white) {}
 
-  bool King::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-    if (abs(turn.first.first - turn.second.first) <= 1 
-          && abs(turn.first.second - turn.second.second) <= 1) {
+  bool King::IsLegalMove(std::pair<Location, Location> turn) {
+    if (abs(turn.first.Row() - turn.second.Row()) <= 1 
+          && abs(turn.first.Col() - turn.second.Col()) <= 1) {
       return true;
     }
     
@@ -22,8 +22,8 @@ namespace chess {
       valid_row = 0;
     }
     
-    if (turn.first.first == turn.second.first && turn.first.first == valid_row) {
-      if (turn.first.second == 4 && (turn.second.second == 2 || turn.second.second == 6)) {
+    if (turn.first.Row() == turn.second.Row() && turn.first.Row() == valid_row) {
+      if (turn.first.Col() == 4 && (turn.second.Col() == 2 || turn.second.Col() == 6)) {
         return true;
       }
     }
@@ -31,10 +31,10 @@ namespace chess {
     return false;
   }
 
-  std::vector<std::pair<int,int>> King::GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) {
-    std::vector<std::pair<int,int>> path;
-    if (abs(turn.first.first - turn.second.first) <= 1
-        && abs(turn.first.second - turn.second.second) <= 1) {
+  std::vector<Location> King::GetPath(std::pair<Location,Location> turn) {
+    std::vector<Location> path;
+    if (abs(turn.first.Row() - turn.second.Row()) <= 1
+        && abs(turn.first.Col() - turn.second.Col()) <= 1) {
       return path;
     }
 
@@ -45,17 +45,17 @@ namespace chess {
       valid_row = 0;
     }
 
-    if (turn.first.first == turn.second.first && turn.first.first == valid_row && turn.first.second == 4) {
-      if (turn.second.second == 2) {
-        auto point_after_rook = std::make_pair(valid_row, turn.second.second - 1);
+    if (turn.first.Row() == turn.second.Row() && turn.first.Row() == valid_row && turn.first.Col() == 4) {
+      if (turn.second.Col() == 2) {
+        auto point_after_rook = Location(valid_row, turn.second.Col() - 1);
         path.push_back(point_after_rook);
-        for (int i = turn.second.second; i < turn.first.second; i++) {
-          auto point = std::make_pair(valid_row, i);
+        for (int i = turn.second.Col(); i < turn.first.Col(); i++) {
+          auto point = Location(valid_row, i);
           path.push_back(point);
         }
-      } else if (turn.second.second == 6) {
-        for (int i = turn.first.second + 1; i <= turn.second.second; i++) {
-          auto point = std::make_pair(valid_row, i);
+      } else if (turn.second.Col() == 6) {
+        for (int i = turn.first.Col() + 1; i <= turn.second.Col(); i++) {
+          auto point = Location(valid_row, i);
           path.push_back(point);
         }
       }

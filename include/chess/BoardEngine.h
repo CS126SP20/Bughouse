@@ -14,10 +14,11 @@
 #include "chess/ChessImages.h"
 #include "chess/BoardView.h"
 #include "chess/Player.h"
+#include "chess/Location.h"
 
 namespace chess {
   const int kMaxSeconds = 300;
-  const int EMPTY = -1;
+  
   // Represents one game. Holds the board and the board view and operates upon them.
 class BoardEngine {
   
@@ -28,14 +29,12 @@ public:
   /**
    * @param chess_images - A ChessImages object that is shared with the other board.
    *                     Use to retreive images of the peices.
-   * @param is_white TODO: Maybe delete this since each board starts as white
    * @param board_bounds - The pixel bounds for the board on the screen. Includes the border
    * @param top_box_bounds - The pixel bounds for the top box that holds black's extra pieces
    * @param bottom_box_bounds - The pixel bounds for the bottom box that holds white's extra pieces
    */
-  BoardEngine(ChessImages* chess_images, bool is_white, 
-      ci::Area board_bounds, ci::Area top_box_bounds, ci::Area bottom_box_bounds,
-      Player team1_player, Player team2_player);
+  BoardEngine(ChessImages *chess_images, ci::Area board_bounds, ci::Area top_box_bounds, ci::Area bottom_box_bounds,
+              Player team1_player, Player team2_player);
 
   // Called on click, updates turn_ according to the user action.
   void ProcessClick(ci::vec2 point);
@@ -55,7 +54,6 @@ public:
 
   
 private:
-  bool is_start_;
   // A board object to represent the board
   Board board_;
 
@@ -64,13 +62,14 @@ private:
   
   // Represents a move of a piece from one point to another.
   // Updated every time the user clicks the screen
-  std::pair<std::pair<int,int>,std::pair<int,int>> turn_;
+  std::pair<Location, Location> turn_;
+  std::pair<Location, Location> last_turn_;
   Player team_1_player_;
   Player team_2_player_;
   GameState UpdateGameState(Piece* captured);
-  void UpdateTurnWithBoardClick(std::pair<int,int> click);
-  void UpdateTurnWithBoxClick(std::pair<int,int> click);
-  bool IsMoveEmpty(std::pair<int,int> move);
+  void UpdateTurnWithBoardClick(Location& click);
+  void UpdateTurnWithBoxClick(Location& click);
+
   void CheckTimeOut();
   void SwapTurns();
   

@@ -25,9 +25,9 @@ namespace chess {
 
    void Reset() override { }
 
-   bool Pawn::IsLegalMove(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+   bool Pawn::IsLegalMove(std::pair<Location, Location> turn) override;
    
-   std::vector<std::pair<int,int>> GetPath(std::pair<std::pair<int,int>,std::pair<int,int>> turn) override;
+   std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
 
    void DoTurn() override;
  };
