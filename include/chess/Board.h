@@ -28,13 +28,21 @@ public:
   bool HasPromotedPawn(bool is_white_turn);
   void PromotePawn(PieceType choice, bool is_white_turn);
   
+  
+  
 private:
   Piece* board_[kBoardSize][kBoardSize];
   std::vector<Piece*> black_player_hand_;
   std::vector<Piece*> white_player_hand_;
   void SetUpBoard();
   bool IsPathOpen(std::vector<std::pair<int,int>>& path);
-  bool can_en_pass;
+  bool can_white_castle_;
+  bool can_black_castle_;
+  bool CanCastle(bool is_white_turn);  
+  
+  void TurnOffCastle(bool is_white_turn);
+  void Castle(std::pair<std::pair<int, int>, std::pair<int, int>> turn);
+
 
 };  
 }

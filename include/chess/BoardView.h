@@ -50,8 +50,6 @@ private:
   ci::Color current_opponent_color_;
   void PrintText(const std::string &text, const ci::Color &color, const cinder::vec2 &loc, const ci::ivec2& size);
   std::string ReportTime(int seconds);
-
-
 };  
   
 }

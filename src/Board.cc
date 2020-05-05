@@ -15,7 +15,10 @@
 
 namespace chess {
 
-Board::Board() {
+Board::Board()
+  : can_black_castle_{true},
+    can_white_castle_{true} 
+    {
   SetUpBoard();
 }  
 
@@ -29,6 +32,15 @@ Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool
   } else {
     Piece* to_move = board_[turn.first.first][turn.first.second];
     captured = board_[turn.second.first][turn.second.second];
+    
+    if (CanCastle(is_white_turn) && (to_move->GetPieceType() == ROOK || to_move->GetPieceType() == KING)) {
+      TurnOffCastle(is_white_turn);
+      if (to_move->GetPieceType() == KING && abs(turn.first.second - turn.second.second) > 1) {
+        Castle(turn);
+        return nullptr;
+      }
+    }
+    
     if (captured != nullptr && captured->GetPieceType() != PAWN && captured->IsPawn()) {
       Piece* to_delete = captured;
       captured = new Pawn(captured->GetIsWhite());
@@ -42,6 +54,43 @@ Piece* Board::Update(std::pair<std::pair<int,int>,std::pair<int,int>> turn, bool
 
   return captured;
 }
+
+void Board::Castle(std::pair<std::pair<int, int>, std::pair<int, int>> turn) {
+  board_[turn.second.first][turn.second.second] = board_[turn.first.first][turn.first.second];
+  board_[turn.first.first][turn.first.second] = nullptr;
+
+  std::pair<int,int> start_rook_loc;
+  std::pair<int,int> new_rook_loc;
+  if (turn.second.second == 2) {
+    start_rook_loc = std::make_pair(turn.second.first, 0);
+    new_rook_loc = std::make_pair(turn.second.first, turn.second.second + 1);
+  } else {
+    start_rook_loc = std::make_pair(turn.second.first, kBoardSize - 1);
+    new_rook_loc = std::make_pair(turn.second.first, turn.second.second - 1);
+  }
+  
+  board_[new_rook_loc.first][new_rook_loc.second] = board_[start_rook_loc.first][start_rook_loc.second];
+  board_[start_rook_loc.first][start_rook_loc.second] = nullptr;
+  
+}
+
+bool Board::CanCastle(bool is_white_turn) {
+  if (is_white_turn) {
+    return can_white_castle_;
+  } else {
+    return can_black_castle_;
+  }
+}
+
+void Board::TurnOffCastle(bool is_white_turn) {
+  if (is_white_turn) {
+    can_white_castle_ = false;
+  } else {
+    can_black_castle_ = false;
+  }
+}
+
+
 
 bool Board::IsValidMove(std::pair<std::pair<int, int>, std::pair<int, int> > turn, bool is_white_turn) {
   Piece* to_move;
@@ -57,6 +106,8 @@ bool Board::IsValidMove(std::pair<std::pair<int, int>, std::pair<int, int> > tur
     if (IsPathOpen(path)) {
       if (to_move->GetPieceType() == PAWN && path.size() == 0) {
         if (board_[turn.second.first][turn.second.second] != nullptr) is_valid = true;
+      } else if (to_move->GetPieceType() == KING && abs(turn.first.second - turn.second.second) > 1) { 
+        is_valid = CanCastle(is_white_turn);
       } else {
         is_valid = true;
       }
