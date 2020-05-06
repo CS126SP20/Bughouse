@@ -27,7 +27,18 @@ public:
   Piece* Update(std::pair<Location, Location> turn, bool is_white_turn);
 
   // Checks if the move is valid according to the turn
+  // Called when turn is full
   bool IsValidMove(std::pair<Location, Location> turn, bool is_white_turn);
+
+  // Promotes the pawn with the choice of the player. 
+  void PromotePawn(PieceType choice, bool is_white_turn);
+
+  // Checks if the move was a pawn promotion
+  bool HasPromotedPawn(bool is_white_turn);
+
+  // Puts a piece into the player's hand
+  // Piece is given by other engine
+  void ReceivePiece(Piece* piece);
   
   // Returns the piece pointer of the piece at a square.
   // Nullptr is returned if there is no piece at that square
@@ -41,19 +52,8 @@ public:
   // Returns nullptr if the index is invalid
   Piece* GetAndRemoveFromHand(bool is_white, int index);
   
-  // Puts a piece into the player's hand
-  void ReceivePiece(Piece* piece);
-  
   // Returns the specified player's number of pieces in the hand
   int GetHandSize(bool is_white);
-
-  // Checks if the move was a pawn promotion
-  bool HasPromotedPawn(bool is_white_turn);
-  
-  // Promotes the pawn with the choice of the player. 
-  void PromotePawn(PieceType choice, bool is_white_turn);
-  
-  
   
 private:
   
@@ -80,28 +80,32 @@ private:
   
   // Called by constructor to initialize the board in standard chess format
   void SetUpBoard();
-  
-  // Checks to make sure that the path of the piece is open
-  // Called after IsValidMove
-  bool IsPathOpen(std::vector<Location>& path);
-  
+
+  // Performs the en passant
+  Piece* EnPass(Location pawn_destination, bool is_white_turn);
   // Given that the current piece is a pawn attempting to en pass, makes sure that
   // it is valid
   bool CanEnPass(Location pawn_destination, bool is_white_turn);
   
-  // Returns castling rights of the respective player
-  bool CanCastleQueen(bool is_white_turn);  
-  bool CanCastleKing(bool is_white_turn);
-  
-  // Performs the en passant
-  Piece* EnPass(Location pawn_destination, bool is_white_turn);
-
   // Performs the castling
   void Castle(std::pair<Location, Location> turn);
+  
+  void UpdateCastlingRights(Location destination, Piece* to_move, bool is_white_turn);
+  
+  // Returns castling rights of the respective player
+  bool CanCastleQueen(bool is_white_turn);
+  bool CanCastleKing(bool is_white_turn);
   
   // Invalidates castling rights of the respective player
   void TurnOffQueenCastle(bool is_white_turn);
   void TurnOffKingCastle(bool is_white_turn);
+
+  // Checks to make sure that the path of the piece is open
+  // Called after IsValidMove
+  bool IsPathOpen(std::vector<Location>& path);
+
+  // Given that the player chose to place from the hand, place the piece down
+  void PlacePieceOnBoard(std::pair<Location,Location> turn, bool is_white_turn);
   
 };  
 
