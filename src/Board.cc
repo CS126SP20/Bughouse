@@ -16,8 +16,10 @@
 namespace chess {
 
 Board::Board()
-  : can_black_castle_{true},
-    can_white_castle_{true},
+  : can_black_castle_queen_{true},
+    can_white_castle_king_{true},
+    can_black_castle_king_{true},
+    can_white_castle_queen_{true},
     en_pass_col_(EMPTY),
     is_en_pass_(false)
     {
@@ -25,48 +27,79 @@ Board::Board()
 }  
 
 Piece* Board::Update(std::pair<Location, Location> turn, bool is_white_turn) {
+  // Default captured piece is nullptr
   Piece* captured = nullptr;
+  
   if (turn.first.Col() == EMPTY) {
+    // The piece was selected from the hand
     Piece* to_move = GetAndRemoveFromHand(is_white_turn, turn.first.Row());
     to_move->DoTurn();
+    
+    // Place the piece on the board
     board_[turn.second.Row()][turn.second.Col()] = to_move;
+    
+    // No captures
+    return captured;
+  }
+  
+  // The piece to move is the first part of turn
+  Piece* to_move = board_[turn.first.Row()][turn.first.Col()];
+  
+  // Check en passant special and pawn special cases
+  if (to_move->GetPieceType() == PAWN && abs(turn.second.Row() - turn.first.Row()) == 2) {
+    
+    // The pawn double moved, so en passant could happen on the next move
+    en_pass_col_ = turn.second.Col();
+    is_en_pass_ = false;
+    
+  } else if (is_en_pass_) {
+    
+    // Current move is an en passant, so do that.
+    captured = EnPass(turn.second, is_white_turn);
+    en_pass_col_ = EMPTY;
+    is_en_pass_ = false;
     
   } else {
-    Piece* to_move = board_[turn.first.Row()][turn.first.Col()];
     
-    if (to_move->GetPieceType() == PAWN && abs(turn.second.Row() - turn.first.Row()) == 2) {
-      en_pass_col_ = turn.second.Col();
-      is_en_pass_ = false;
-    } else if (is_en_pass_) {
-      captured = EnPass(turn.second, is_white_turn);
-      en_pass_col_ = EMPTY;
-      is_en_pass_ = false;
-    } else {
-      captured = board_[turn.second.Row()][turn.second.Col()];
-      is_en_pass_ = false;
-      en_pass_col_ = EMPTY;
-    }
-    
-    
-    if (CanCastle(is_white_turn) && (to_move->GetPieceType() == ROOK || to_move->GetPieceType() == KING)) {
-      TurnOffCastle(is_white_turn);
-      if (to_move->GetPieceType() == KING && abs(turn.first.Col() - turn.second.Col()) > 1) {
-        Castle(turn);
-        return nullptr;
-      }
-    }
-    
-    if (captured != nullptr && captured->GetPieceType() != PAWN && captured->IsPawn()) {
-      Piece* to_delete = captured;
-      captured = new Pawn(captured->GetIsWhite());
-      delete to_delete;
-    }
-    board_[turn.second.Row()][turn.second.Col()] = to_move;
-    to_move->DoTurn();
-    board_[turn.first.Row()][turn.first.Col()] = nullptr;
+    // Nothing special happened
+    captured = board_[turn.second.Row()][turn.second.Col()];
+    is_en_pass_ = false;
+    en_pass_col_ = EMPTY;
     
   }
-
+    
+  // Check for castling or movement of rook or king
+  if (CanCastleKing(is_white_turn) || CanCastleQueen(is_white_turn)) {
+    if (to_move -> GetPieceType() == ROOK) {
+      if (turn.second.Col() < kBoardSize / 2) {
+        TurnOffQueenCastle(is_white_turn);
+      } else {
+        TurnOffKingCastle(is_white_turn);
+      }
+    } else if (to_move->GetPieceType() == KING) {
+      
+      if (abs(turn.first.Col() - turn.second.Col()) > 1) {
+        Castle(turn);
+        TurnOffKingCastle(is_white_turn);
+        TurnOffQueenCastle(is_white_turn);
+        return nullptr;
+      }
+      
+      TurnOffKingCastle(is_white_turn);
+      TurnOffQueenCastle(is_white_turn);
+    }
+  }
+  
+  // 
+  if (captured != nullptr && captured->GetPieceType() != PAWN && captured->IsPawn()) {
+    Piece* to_delete = captured;
+    captured = new Pawn(captured->GetIsWhite());
+    delete to_delete;
+  }
+  board_[turn.second.Row()][turn.second.Col()] = to_move;
+  to_move->DoTurn();
+  board_[turn.first.Row()][turn.first.Col()] = nullptr;
+  
   return captured;
 }
 
@@ -101,19 +134,35 @@ void Board::Castle(std::pair<Location, Location> turn) {
   
 }
 
-bool Board::CanCastle(bool is_white_turn) {
+bool Board::CanCastleQueen(bool is_white_turn) {
   if (is_white_turn) {
-    return can_white_castle_;
+    return can_white_castle_queen_;
   } else {
-    return can_black_castle_;
+    return can_black_castle_queen_;
   }
 }
 
-void Board::TurnOffCastle(bool is_white_turn) {
+bool Board::CanCastleKing(bool is_white_turn) {
   if (is_white_turn) {
-    can_white_castle_ = false;
+    return can_white_castle_king_;
   } else {
-    can_black_castle_ = false;
+    return can_black_castle_king_;
+  }
+}
+
+void Board::TurnOffQueenCastle(bool is_white_turn) {
+  if (is_white_turn) {
+    can_white_castle_queen_ = false;
+  } else {
+    can_black_castle_queen_ = false;
+  }
+}
+
+void Board::TurnOffKingCastle(bool is_white_turn) {
+  if (is_white_turn) {
+    can_white_castle_king_ = false;
+  } else {
+    can_black_castle_king_ = false;
   }
 }
 
@@ -134,8 +183,11 @@ bool Board::IsValidMove(std::pair<Location, Location> turn, bool is_white_turn) 
       if (to_move->GetPieceType() == PAWN && path.size() == 0) {
         if (board_[turn.second.Row()][turn.second.Col()] != nullptr) is_valid = true;
         else is_valid = CanEnPass(turn.second, is_white_turn);
-      } else if (to_move->GetPieceType() == KING && abs(turn.first.Col() - turn.second.Col()) > 1) { 
-        is_valid = CanCastle(is_white_turn);
+      } else if (to_move->GetPieceType() == KING && abs(turn.first.Col() - turn.second.Col()) > 1) {
+        if ((turn.second.Col() < kBoardSize / 2 && CanCastleQueen(is_white_turn))
+        || (turn.second.Col() > kBoardSize / 2 && CanCastleKing(is_white_turn))) {
+          is_valid = true;
+        }
       } else {
         is_valid = true;
       }

@@ -103,8 +103,19 @@ void BoardView::Draw(Board& board, Player& team1, Player& team2,
   DrawBoxes();
   ci::gl::color(1.0f, 1.0f, 1.0f);
   DrawBoard();
+  
   ci::gl::color(1.0f, 1.0f, 1.0f);
-  DrawTurns(turn, last_turn);
+  bool is_white = current_player_color_ == kWhiteCol;
+  ci::Color curr_color;
+  ci::Color opp_color;
+  if (is_white == team1.is_white_) {
+    curr_color = team1.team_color_;
+    opp_color = team2.team_color_;
+  } else {
+    curr_color = team2.team_color_;
+    opp_color = team1.team_color_;
+  }
+  DrawTurns(turn, last_turn, curr_color, opp_color);
   ci::gl::color(1.0f, 1.0f, 1.0f);
   DrawPieces(board);
   ci::gl::color(1.0f, 1.0f, 1.0f);
@@ -135,11 +146,13 @@ void BoardView::DrawBoard() {
 }
 
 void BoardView::DrawTurns(std::pair<Location, Location> turn,
-                          std::pair<Location, Location> last_turn) {
+                          std::pair<Location, Location> last_turn,
+                          ci::Color current_color, ci::Color opponent_color) {
+  
   bool is_white = kWhiteCol == current_player_color_;
-  DrawTurnSquare(turn.first, is_white, kYellowCol);
-  if (last_turn.first.Col() != EMPTY) DrawTurnSquare(last_turn.first, is_white, kRedCol);
-  DrawTurnSquare(last_turn.second, is_white, kRedCol);
+  DrawTurnSquare(turn.first, is_white, current_color);
+  if (last_turn.first.Col() != EMPTY) DrawTurnSquare(last_turn.first, is_white, opponent_color);
+  DrawTurnSquare(last_turn.second, is_white, opponent_color);
   
 }
 

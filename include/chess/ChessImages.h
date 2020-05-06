@@ -22,8 +22,6 @@ const int kBoxHeightIndex = 5;
 const auto kGreyCol = ci::Color(1.0f * 91/255, 1.0f * 89/255, 1.0f * 89/255);
 const auto kBlackCol = ci::Color(1.0f * 62/255, 1.0f * 54/255, 1.0f * 52/255);
 const auto kWhiteCol = ci::Color(1.0f * 248 /255, 1.0f * 244/255, 1.0f * 236/255);
-const auto kYellowCol = ci::Color(1.0f * 255 /255, 1.0f * 255/255, 1.0f * 102/255);
-const auto kRedCol = ci::Color(1.0f * 255 /255, 1.0f * 150/255, 1.0f * 79/255);
 
 
 class ChessImages {

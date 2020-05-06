@@ -17,9 +17,9 @@
 namespace myapp {
   
 // Team settings  
-const auto kTeam1Color = ci::Color(1.0f*210/256, 1.0f*180/256, 1.0f*222/256);
+const auto kTeam1Color = ci::Color(1.0f*210/255, 1.0f*180/255, 1.0f*222/255);
 const std::string kTeam1Name = "Purple";
-const auto kTeam2Color = ci::Color(1.0f*89/256, 1.0f*163/256, 1.0f*229/256);
+const auto kTeam2Color = ci::Color(1.0f*183/255, 1.0f*201/255, 1.0f*226/255);
 const std::string kTeam2Name = "Blue";
 
 class MyApp : public cinder::app::App {
