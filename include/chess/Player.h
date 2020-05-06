@@ -16,9 +16,7 @@ struct Player {
   bool is_white_;
   ci::Color team_color_;
   std::string team_name_;
-//  PlayerMove (????);
-};  
-
+};
 }
 
 
