@@ -90,7 +90,7 @@ private:
   // Performs the castling
   void Castle(std::pair<Location, Location> turn);
   
-  void UpdateCastlingRights(Location destination, Piece* to_move, bool is_white_turn);
+  void UpdateCastlingRights(Location destination, Piece* to_move, Piece* captured, bool is_white_turn);
   
   // Returns castling rights of the respective player
   bool CanCastleQueen(bool is_white_turn);

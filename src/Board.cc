@@ -74,7 +74,7 @@ Piece* Board::Update(std::pair<Location, Location> turn, bool is_white_turn) {
     is_en_pass_ = false;
   }
   
-  UpdateCastlingRights(turn.second, to_move, is_white_turn);
+  UpdateCastlingRights(turn.second, to_move, captured, is_white_turn);
   
   // If the captured piece was a promoted pawn, revert back to a pawn
   if (captured != nullptr && captured->GetPieceType() != PAWN && captured->IsPawn()) {
@@ -345,12 +345,12 @@ void Board::Castle(std::pair<Location, Location> turn) {
   
 }
 
-void Board::UpdateCastlingRights(Location destination, chess::Piece *to_move, bool is_white_turn) {
+void Board::UpdateCastlingRights(Location destination, chess::Piece *to_move, Piece* captured, bool is_white_turn) {
   // Check for castling or movement of rook or king
   if (CanCastleKing(is_white_turn) || CanCastleQueen(is_white_turn)) {
-    
-    if (to_move -> GetPieceType() == ROOK) {
-      
+
+    if (to_move->GetPieceType() == ROOK) {
+
       if (destination.Col() < kBoardSize / 2) {
         // They moved the left rook, so can no longer queen-side castle
         TurnOffQueenCastle(is_white_turn);
@@ -358,13 +358,25 @@ void Board::UpdateCastlingRights(Location destination, chess::Piece *to_move, bo
         // They moved the right rook, so can no longer king-side castle
         TurnOffKingCastle(is_white_turn);
       }
-      
+
     } else if (to_move->GetPieceType() == KING) {
       // They moved the king, so can not longer castle in either direction
       TurnOffKingCastle(is_white_turn);
       TurnOffQueenCastle(is_white_turn);
     }
   }
+  
+  // Check to see if current player eliminated opponent's castling rights
+  if (captured != nullptr && captured->GetPieceType() == ROOK) {
+    if (CanCastleQueen(!is_white_turn) && destination.Col() < kBoardSize / 2) {
+      // Queenside rook was captured
+      TurnOffQueenCastle(!is_white_turn);
+    } else if (CanCastleKing(!is_white_turn)) {
+      // Kingside rook was captured
+      TurnOffKingCastle(!is_white_turn);
+    }
+  }
+  
 }
 
 bool Board::CanCastleQueen(bool is_white_turn) {
