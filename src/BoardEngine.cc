@@ -26,7 +26,7 @@ BoardEngine::BoardEngine(ChessImages *chess_images, ci::Area board_bounds, ci::A
 // Public member functions
 //================================================================
 
-void BoardEngine::ProcessClick(ci::vec2 point) {
+void BoardEngine::ProcessClick(const ci::vec2& point) {
   
   if (current_game_state_ == GameState::kPawnPromotion) {
     // The click has to be a promotion choice    

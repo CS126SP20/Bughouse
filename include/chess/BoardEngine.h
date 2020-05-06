@@ -44,7 +44,7 @@ public:
   bool is_white_turn_;
   
   // Called on click, updates turn_ according to the user action.
-  void ProcessClick(ci::vec2 point);
+  void ProcessClick(const ci::vec2& point);
 
   // Called by update, moves board if turn is full
   Piece* Move();
