@@ -40,7 +40,7 @@ void MyApp::setup() {
                                            center.x + 7*kBoardLen/5 + kBorder, center.y + kBoardLen/2);
   
   // Load chess images -- board, pieces
-  ChessImages* chess_images_ = new ChessImages();
+  auto* chess_images_ = new ChessImages();
   chess_images_->SetUp();
   
   // Initialize players

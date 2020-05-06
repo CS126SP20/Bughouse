@@ -15,6 +15,7 @@
 #include "chess/BoardView.h"
 #include "chess/Player.h"
 #include "chess/Location.h"
+#include <cinder/audio/Voice.h>
 
 namespace chess {
   const int kMaxSeconds = 300;
@@ -79,6 +80,9 @@ private:
   // Players know their team, their time, and their color
   Player team_1_player_;
   Player team_2_player_;
+  
+  // Sfx
+  ci::audio::VoiceRef sfx_;
   
   // Called by Move, changes game state depending on the board move
   GameState UpdateGameState(Piece* captured);

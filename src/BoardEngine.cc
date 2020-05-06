@@ -4,6 +4,7 @@
 
 #include "chess/BoardEngine.h"
 #include <cinder/Area.h>
+#include <cinder/app/AppBase.h>
 #include "chess/ChessImages.h"
 
 namespace chess {
@@ -19,6 +20,10 @@ BoardEngine::BoardEngine(ChessImages *chess_images, ci::Area board_bounds, ci::A
       current_game_state_{GameState::kPlaying},
       is_white_turn_{true}
     {
+      ci::audio::SourceFileRef sfx_file =
+          cinder::audio::load( cinder::app::loadAsset(
+              "sfx.mp3"));
+      sfx_ = ci::audio::Voice::create(sfx_file);
 }
 
 //================================================================
@@ -178,6 +183,9 @@ void BoardEngine::CheckTimeOut() {
 }
 
 void BoardEngine::SwapTurns() {
+  // Play the sound
+  sfx_->start();
+  
   // Update the last turn
   last_turn_ = turn_;
   // Empty the current turn

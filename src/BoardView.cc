@@ -358,13 +358,16 @@ void BoardView::DrawPlayers(chess::Player &player1, chess::Player &player2) {
 std::string BoardView::ReportTime(int seconds) {
   int sec_remain = kMaxSeconds - seconds;
   
-  int min = floor(sec_remain / 60);
-  int sec = sec_remain % 60;
+  std::string min = std::to_string(int(floor(sec_remain / 60)));
+  std::string sec = std::to_string(sec_remain % 60);
   
-  auto to_write =  std::to_string(min) + ":" + std::to_string(sec);
-  if (to_write.length() < 4) {
-    to_write += "0"; // In the case that the time was divisible by 10, add another 0 so it stays in format
+  // Add a zero in front for single digit numbers
+  if (sec.length() == 1) {
+    sec = "0" + sec;
   }
+  
+  auto to_write =  min + ":" + sec;
+
   return to_write;
 }
 
