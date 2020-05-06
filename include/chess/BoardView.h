@@ -50,7 +50,7 @@ class BoardView {
 
  private:
   // All of the choices for the player during promotion
-  const PieceType kPromotionChoices[4] = {QUEEN, KNIGHT, ROOK, BISHOP};
+  PieceType kPromotionChoices[4] = {QUEEN, KNIGHT, ROOK, BISHOP};
   // Represents all of the areas to draw on the UI
   Bounds bounds_;
 
