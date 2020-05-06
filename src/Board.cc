@@ -3,7 +3,6 @@
 //
 
 #include "chess/Board.h"
-#include <chess/BoardEngine.h>
 #include "chess/PieceClasses/Pawn.h"
 #include "chess/PieceClasses/King.h"
 #include "chess/PieceClasses/Queen.h"
@@ -112,7 +111,7 @@ bool Board::IsValidMove(std::pair<Location, Location> turn, bool is_white_turn) 
     if (IsPathOpen(path)) {
       // Path is clear
       
-      if (to_move->GetPieceType() == PAWN && path.size() == 0) {
+      if (to_move->GetPieceType() == PAWN && path.empty()) {
         
         // Pawn moved diagonally, so either a capture or an en passant
         if (board_[turn.second.Row()][turn.second.Col()] != nullptr) is_valid = true; // Pawn capture

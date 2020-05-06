@@ -4,7 +4,6 @@
 
 #include "chess/BoardEngine.h"
 #include <cinder/Area.h>
-
 #include "chess/ChessImages.h"
 
 namespace chess {
