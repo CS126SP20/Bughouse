@@ -18,7 +18,7 @@
    - Later: Add boardview to separate visual elements from the game code
    - Later: Add board flipping
    
- -**4/24/20** Finish unfinished tasks
+ - **4/24/20** Finish unfinished tasks
    - [x] Board flipping
    - [x] BoardView refactor  
    - [x] Loading pieces from the side of the screen works
