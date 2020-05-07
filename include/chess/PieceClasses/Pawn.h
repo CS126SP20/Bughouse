@@ -22,7 +22,7 @@ class Pawn : public Piece {
 
   bool Pawn::IsLegalMove(std::pair<Location, Location> turn) override;
    
-  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+  std::vector<Location> CalculatePath(std::pair<Location, Location> turn) override;
 
   void DoTurn() override;
   

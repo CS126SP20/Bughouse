@@ -27,7 +27,7 @@ bool Bishop::IsLegalMove(std::pair<Location, Location> turn) {
   return is_valid;
 }
 
-std::vector<Location> Bishop::GetPath(std::pair<Location, Location> turn) {
+std::vector<Location> Bishop::CalculatePath(std::pair<Location, Location> turn) {
   std::vector<Location> path;
     
   int row1 = turn.first.Row();

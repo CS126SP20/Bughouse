@@ -23,7 +23,7 @@ class Rook : public Piece {
 
   bool IsLegalMove(std::pair<Location, Location> turn) override;
     
-  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+  std::vector<Location> CalculatePath(std::pair<Location, Location> turn) override;
 
   void DoTurn() override {}
 

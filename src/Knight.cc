@@ -21,7 +21,7 @@ bool Knight::IsLegalMove(std::pair<Location, Location> turn) {
         (row_diff == 2 && col_diff == 1) || (row_diff == 1 && col_diff == 2);
 }
 
-std::vector<Location> Knight::GetPath(std::pair<Location, Location> turn) {
+std::vector<Location> Knight::CalculatePath(std::pair<Location, Location> turn) {
   std::vector<Location> path;
   // The knight can jump, so no squares need to be empty
   return path;

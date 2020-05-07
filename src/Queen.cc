@@ -21,15 +21,15 @@ bool Queen::IsLegalMove(std::pair<Location, Location> turn) {
 }
 
 
-std::vector<Location> Queen::GetPath(std::pair<Location, Location> turn) {
+std::vector<Location> Queen::CalculatePath(std::pair<Location, Location> turn) {
   // Again, a queen is just a rook-bishop
   Rook rook(is_white_, false);
   Bishop bishop(is_white_, false);
   
   if (rook.IsLegalMove(turn)) {
-    return rook.GetPath(turn);
+    return rook.CalculatePath(turn);
   } else {
-    return bishop.GetPath(turn);
+    return bishop.CalculatePath(turn);
   }
 }
 

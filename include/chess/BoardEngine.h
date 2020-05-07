@@ -37,12 +37,6 @@ public:
    */
   BoardEngine(ChessImages *chess_images, ci::Area board_bounds, ci::Area top_box_bounds, ci::Area bottom_box_bounds,
               Player team1_player, Player team2_player);
-
-  // State of game. Starts as kPlaying
-  GameState current_game_state_;
-
-  // Dynamically changed every time the board flips for the other player
-  bool is_white_turn_;
   
   // Called on click, updates turn_ according to the user action.
   void ProcessClick(const ci::vec2& point);
@@ -64,6 +58,12 @@ public:
   void Draw();
   
 private:
+  // State of game. Starts as kPlaying
+  GameState current_game_state_;
+
+  // Dynamically changed every time the board flips for the other player
+  bool is_white_turn_;
+
   // A board object to represent the board
   Board board_;
 

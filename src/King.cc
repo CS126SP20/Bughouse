@@ -38,7 +38,7 @@ bool King::IsLegalMove(std::pair<Location, Location> turn) {
   return false;
 }
 
-std::vector<Location> King::GetPath(std::pair<Location,Location> turn) {
+std::vector<Location> King::CalculatePath(std::pair<Location,Location> turn) {
     
   std::vector<Location> path;
   

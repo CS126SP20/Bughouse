@@ -106,7 +106,7 @@ bool Board::IsValidMove(std::pair<Location, Location> turn, bool is_white_turn) 
   if (to_move->IsLegalMove(turn)) {
     
     // Get the path of the move
-    std::vector<Location> path = to_move->GetPath(turn);
+    std::vector<Location> path = to_move->CalculatePath(turn);
     
     if (IsPathOpen(path)) {
       // Path is clear

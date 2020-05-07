@@ -17,7 +17,7 @@ bool Rook::IsLegalMove(std::pair<Location, Location> turn) {
         || (turn.first.Col() == turn.second.Col()); // Moving vertically
 }    
 
-std::vector<Location> Rook::GetPath(std::pair<Location,Location> turn) {
+std::vector<Location> Rook::CalculatePath(std::pair<Location,Location> turn) {
   
   std::vector<Location> path;
   int row1 = turn.first.Row();

@@ -55,7 +55,7 @@ bool Pawn::IsLegalMove(std::pair<Location, Location> turn) {
   return is_valid;
 }
 
-std::vector<Location> Pawn::GetPath(std::pair<Location, Location> turn) {
+std::vector<Location> Pawn::CalculatePath(std::pair<Location, Location> turn) {
   std::vector<Location> path;
   
   if (turn.first.Col() == EMPTY) {

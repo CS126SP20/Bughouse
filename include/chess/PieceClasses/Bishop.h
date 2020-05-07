@@ -22,7 +22,7 @@ class Bishop : public Piece {
 
   bool IsPawn() override { return is_pawn_; }
 
-  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+  std::vector<Location> CalculatePath(std::pair<Location, Location> turn) override;
 
   void DoTurn() override {}
     

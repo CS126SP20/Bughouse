@@ -22,7 +22,7 @@ class King : public Piece {
     
   bool IsPawn() override { return false; }
 
-  std::vector<Location> GetPath(std::pair<Location, Location> turn) override;
+  std::vector<Location> CalculatePath(std::pair<Location, Location> turn) override;
 
   void DoTurn() override { }
   

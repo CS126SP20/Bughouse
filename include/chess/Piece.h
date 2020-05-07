@@ -34,7 +34,7 @@ class Piece {
   // Given that the move is legal, returns the path that the piece requires to be open
   // in order to reach the destination square
   // Called after IsLegalMove is verified
-  virtual std::vector<Location> GetPath(std::pair<Location,Location> turn) = 0;
+  virtual std::vector<Location> CalculatePath(std::pair<Location,Location> turn) = 0;
   
   // Color of the piece
   virtual bool GetIsWhite() = 0; 
