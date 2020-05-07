@@ -12,6 +12,7 @@ layout.
 
 ### Game
  - Left click to move pieces
+ ![Game gif](ezgif.com-video-to-gif.gif)
 
 Bughouse chess is a 2 – 4 player blitz chess match (5 minutes per person, no time delay, 2 teams, 2 boards). 
 In a real match, it is a best out of 3 tournament. This is a stretch goal.
