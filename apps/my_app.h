@@ -22,6 +22,7 @@ const std::string kTeam1Name = "Purple";
 const auto kTeam2Color = ci::Color(1.0f*183/255, 1.0f*201/255, 1.0f*226/255);
 const std::string kTeam2Name = "Blue";
 
+
 class MyApp : public cinder::app::App {
  public:
   MyApp() { }
