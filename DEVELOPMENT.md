@@ -26,12 +26,25 @@
    - [x] Knight, Bishop, Rook, and Queen Movement
    - [x] Castling for king
    - [x] Pawn Promotion
-   - [ ] Pawn en passant
+   - [x] Pawn en passant
    
  - **4/28/20** Added to the timer and end game functionalities
-   - [ ] Waiting room screen
-   - [ ] Pawn promotion screen
+   - [x] Waiting room screen
+   - [x] Pawn promotion screen
+   
  - **5/5/20** Clean up unfinished tasks:
    -  Castling, pawn promotion finished
    - Timer bug fixed
    - Later: Documentation, testing 
+   
+ - **5/6/20** Documented and tested
+   - Known error: can castle under check
+   - Fixed other castling errors
+   - Otherwise, finished!  
+   
+ - **Future implementations**
+   - [ ] Network - 4 screens
+   - [ ] Castling bug fix
+   - [ ] Tournament style
+   - [ ] Waiting screen
+   - [ ] Team name and color choice
