@@ -57,6 +57,9 @@ public:
   // Called by cinder draw. Draws board view.
   void Draw();
   
+  // Deletes the images and the board
+  void DeleteGame();
+  
 private:
   // State of game. Starts as kPlaying
   GameState current_game_state_;

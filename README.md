@@ -4,6 +4,15 @@ layout.
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![docs](https://img.shields.io/badge/docs-yes-brightgreen)](docs/README.md)
 
+### Dependencies
+
+ - [gcc] or [clang] or [MSVC 2017+][visual-studio]
+ - [cmake]
+ - [cinder]
+
+### Game
+ - Left click to move pieces
+
 Bughouse chess is a 2 – 4 player blitz chess match (5 minutes per person, no time delay, 2 teams, 2 boards). 
 In a real match, it is a best out of 3 tournament. This is a stretch goal.
 ### Quick rules: 
