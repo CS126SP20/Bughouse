@@ -17,6 +17,7 @@
    - [x] Try to make piece movement
    - Later: Add boardview to separate visual elements from the game code
    - Later: Add board flipping
+   
  -**4/24/20** Finish unfinished tasks
    - [x] Board flipping
    - [x] BoardView refactor  
